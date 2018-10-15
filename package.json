@@ -2,7 +2,7 @@
   "name": "excersize-app",
   "version": "1.0.0",
   "description": "An app to track excersize.",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +21,7 @@
     "express": "^4.16.3",
     "bootstrap": "^4.1.3",
     "jquery": "^3.3.1",
-    "popper.js": "^1.14.4"
+    "popper.js": "^1.14.4",
+    "ejs": "^2.6.1"
   }
 }
