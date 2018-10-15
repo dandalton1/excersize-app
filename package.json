@@ -1,0 +1,26 @@
+{
+  "name": "excersize-app",
+  "version": "1.0.0",
+  "description": "An app to track excersize.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dandalton1/excersize-app.git"
+  },
+  "author": "Daniel Dalton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dandalton1/excersize-app/issues"
+  },
+  "homepage": "https://github.com/dandalton1/excersize-app#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "bootstrap": "^4.1.3",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.4"
+  }
+}
