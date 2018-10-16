@@ -36,6 +36,20 @@ class User {
     }
 }
 
+class Goal {
+    constructor() {
+        this.goalType = GoalTypes.STEPS;
+        this.goalValue = 0;
+    }
+}
+
+var GoalTypes = Object.freeze({
+    "STEPS": 0,
+    "WEIGHT_LOSS": 1,
+    "MILES": 3
+
+});
+
 module.exports = {
-    User
+    User, Goal, GoalTypes
 }

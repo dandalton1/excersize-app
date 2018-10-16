@@ -3,10 +3,10 @@ const { User } = require("./model");
 const mongo = require("mongodb").MongoClient;
 const sha512 = require("js-sha512");
 
-let port = 27017;
-let host = "localhost";
+let db_port = 27017;
+let db_host = "localhost";
 let db_name = "excersize-db";
-let url = `mongodb://${host}:${port}/${db_name}`;
+let url = `mongodb://${db_host}:${db_port}/${db_name}`;
 
 mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
     if (err) throw err;
@@ -101,6 +101,46 @@ app.post("/step", function (req, res, next) {
                     if (err) throw err;
                     console.log(user.name + " took a step");
                     res.send("updated");
+                }
+            );
+        });
+    });
+});
+
+app.post("/set-info", function (req, res, next) {
+    mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+            if (err) throw err;
+            var user = (new User()).genUserFromObject(result);
+            user.height = req.body.height;
+            user.weight = req.body.weight;
+            db.db("excersize-db").collection("users").updateOne(
+                {name: user.name},
+                {$set: {height: user.height, weight: user.weight}},
+                function(err, result) {
+                    if (err) throw err;
+                    console.log(user.name + " updated info; height is " + user.height + "; weight is " + user.weight);
+                    res.send("updated successfully");
+                }
+            );
+        });
+    });
+});
+
+app.post("/set-goal", function (req, res, next) {
+    mongo.connect(url, { useNewUrlParser: true}, function(err, db) {
+        if (err) throw err;
+        db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+            if (err) throw err;
+            var user = (new User()).genUserFromObject(result);
+            
+            db.db("excersize-db").collection("users").updateOne(
+                {name: user.name},
+                {$set: {}},
+                function(err, result) {
+                    if (err) throw err;
+                    
                 }
             );
         });
