@@ -12,6 +12,7 @@ app.set("view engine", "ejs");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/static", express.static("static"));
 app.use(excersize);
 app.use(function (req, res, next) {
     console.log("failed to get url: " + req.originalUrl);

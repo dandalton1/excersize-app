@@ -1,7 +1,8 @@
 const express = require("express");
-const { User } = require("./model");
+const { User, Goal } = require("./model");
 const mongo = require("mongodb").MongoClient;
 const sha512 = require("js-sha512");
+const { checkKeys } = require("../utils");
 
 let db_port = 27017;
 let db_host = "localhost";
@@ -30,36 +31,37 @@ app.get("/", function (req, res, next) {
 
 app.post("/login", function (req, res, next) {
     console.log("login function executed");
-    mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
-        db.db("excersize-db").collection("users").find({ name: req.body.name }).toArray(function (err, results) {
-            var loggedIn = false;
-            for (var result in results) {
-                if (err) throw err;
-                if (sha512.sha512(req.body.password) === results[result].password) {
-                    // login();
-                    res.send("logged in as " + results[result].name);
-                    loggedIn = true;
+    if (checkKeys(req.body, ["name", "password"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").find({ name: req.body.name }).toArray(function (err, results) {
+                var loggedIn = false;
+                for (var result in results) {
+                    if (err) throw err;
+                    if (sha512.sha512(req.body.password) === results[result].password) {
+                        // login();
+                        res.send("logged in as " + results[result].name);
+                        loggedIn = true;
+                    }
                 }
-            }
-            if (!loggedIn) {
-                res.send("failed to log in");
-            }
+                if (!loggedIn) {
+                    res.send("failed to log in");
+                }
+            });
+            db.close();
         });
-        db.close();
-    });
+    } else {
+        res.send("please send a username and password");
+    }
 });
 
 app.post("/sign-up", function (req, res, next) {
     console.log("sign-up function executed");
-    var name = req.body.name;
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var password = req.body.password;
-    if (name !== "" && name != undefined && name != null && firstName !== "" &&
-        firstName != undefined && firstName != null && lastName !== "" &&
-        lastName != undefined && lastName != null && password !== "" &&
-        password != undefined && password != null) {
+    if (checkKeys(req.body, ["name", "firstName", "lastName", "password"])) {
+        var name = req.body.name;
+        var firstName = req.body.firstName;
+        var lastName = req.body.lastName;
+        var password = req.body.password;
         var newUser = new User();
         newUser.generate(name, firstName, lastName, password);
         mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
@@ -89,62 +91,127 @@ app.post("/sign-up", function (req, res, next) {
 
 app.post("/step", function (req, res, next) {
     // ideally: this is going to be requested through AJAX whenever the user takes a step
-    mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
-        db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
-            var user = (new User()).genUserFromObject(result);
-            user.step();
-            db.db("excersize-db").collection("users").updateOne(
-                { name: user.name },
-                { $set: { steps: user.steps } },
-                function (err, result) {
-                    if (err) throw err;
-                    console.log(user.name + " took a step");
-                    res.send("updated");
-                }
-            );
+    if (checkKeys(req.body, ["name"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                var user = (new User()).genUserFromObject(result);
+                user.step();
+                db.db("excersize-db").collection("users").updateOne(
+                    { name: user.name },
+                    { $set: { steps: user.steps } },
+                    function (err, result) {
+                        if (err) throw err;
+                        console.log(user.name + " took a step");
+                        res.send("updated");
+                    }
+                );
+            });
         });
-    });
+    } else {
+        res.send("name not provided");
+    }
 });
 
 app.post("/set-info", function (req, res, next) {
-    mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
-        db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+    if (checkKeys(req.body, ["name", "height", "weight"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
             if (err) throw err;
-            var user = (new User()).genUserFromObject(result);
-            user.height = req.body.height;
-            user.weight = req.body.weight;
-            db.db("excersize-db").collection("users").updateOne(
-                {name: user.name},
-                {$set: {height: user.height, weight: user.weight}},
-                function(err, result) {
-                    if (err) throw err;
-                    console.log(user.name + " updated info; height is " + user.height + "; weight is " + user.weight);
-                    res.send("updated successfully");
-                }
-            );
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                if (err) throw err;
+                var user = (new User()).genUserFromObject(result);
+                user.height = req.body.height;
+                user.weight = req.body.weight;
+                db.db("excersize-db").collection("users").updateOne(
+                    { name: user.name },
+                    { $set: { height: user.height, weight: user.weight } },
+                    function (err, result) {
+                        if (err) throw err;
+                        console.log(user.name + " updated info; height is " + user.height + "; weight is " + user.weight);
+                        res.send("updated successfully");
+                    }
+                );
+            });
         });
-    });
+    } else {
+        res.send("please include a name, height, and weight");
+    }
 });
 
 app.post("/set-goal", function (req, res, next) {
-    mongo.connect(url, { useNewUrlParser: true}, function(err, db) {
-        if (err) throw err;
-        db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+    if (checkKeys(req.body, ["name, goalType, goalValue"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
             if (err) throw err;
-            var user = (new User()).genUserFromObject(result);
-            
-            db.db("excersize-db").collection("users").updateOne(
-                {name: user.name},
-                {$set: {}},
-                function(err, result) {
-                    if (err) throw err;
-                    
-                }
-            );
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                if (err) throw err;
+                var user = (new User()).genUserFromObject(result);
+                user.goal = (new Goal()).createNewGoal(req.body.goalType, req.body.goalValue);
+                db.db("excersize-db").collection("users").updateOne(
+                    { name: user.name },
+                    {
+                        $set:
+                        {
+                            goal: {
+                                goalType: user.goal.goalType,
+                                goalValue: user.goal.goalValue,
+                                progress: user.goal.goalProgress
+                            }
+                        }
+                    },
+                    function (err, result) {
+                        if (err) throw err;
+                        console.log(user.name + " updated goal:");
+                        console.log(user.goal);
+                        res.send("goal updated");
+                    }
+                );
+            });
         });
-    });
+    } else {
+        res.send("Please send a name, a goal type, and a goal value.");
+    }
+});
+
+app.post("/get-goal", function (req, res, next) {
+    if (checkKeys(req.body, ["name"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                if (err) throw err;
+                res.send(result.goal);
+            });
+        });
+    } else {
+        res.send("name required");
+    }
+});
+
+app.post("/get-name", function (req, res, next) {
+    if (checkKeys(req.body, ["name"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                if (err) throw err;
+                res.send(result.firstName + " " + result.lastName);
+            });
+        });
+    } else {
+        res.send("username required");
+    }
+});
+
+app.post("/get-first-name", function (req, res, next) {
+    if (checkKeys(req.body, ["name"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                if (err) throw err;
+                res.send(result.firstName);
+            });
+        });
+    } else {
+        res.send("username required");
+    }
 });
 
 module.exports = app;
