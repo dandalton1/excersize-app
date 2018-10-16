@@ -17,12 +17,13 @@ app.use(function (req, res, next) {
     console.log("failed to get url: " + req.originalUrl);
     res.status(404).render("404");
 });
-/*
 app.use(function (err, req, res, next) {
-    console.log("ERROR! " + err);
+    if (res.headersSent) {
+        return next(err);
+    }
+    console.error("ERROR! " + err.stack);
     res.status(500).render("500");
 });
-*/
 
 app.listen(port);
 

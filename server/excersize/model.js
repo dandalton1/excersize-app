@@ -12,6 +12,18 @@ class User {
         this.goal = null;
     }
 
+    genUserFromObject(o) {
+        this.password = o.password;
+        this.name = o.name;
+        this.firstName = o.firstName;
+        this.lastName = o.lastName;
+        this.height = o.height;
+        this.weight = o.weight;
+        this.steps = o.steps;
+        this.goal = o.goal;
+        return this;
+    }
+
     step() {
         this.steps++;
     }
@@ -20,7 +32,6 @@ class User {
         this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
-        console.log(password);
         this.password = sha512.sha512(password);
     }
 }
