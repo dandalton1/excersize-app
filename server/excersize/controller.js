@@ -4,6 +4,14 @@ const mongo = require("mongodb").MongoClient;
 const sha512 = require("js-sha512");
 const { checkKeys } = require("../utils");
 
+/*
+    This program makes the assumption that you're running a local MongoDB database.
+    To change that, edit these variables:
+
+    db_port: port number of the database (default: 27017)
+    db_host: host name of the database (default: localhost)
+    db_name: name of the database (default: excersize-db)
+*/
 let db_port = 27017;
 let db_host = "localhost";
 let db_name = "excersize-db";
@@ -55,6 +63,81 @@ app.post("/login", function (req, res, next) {
     }
 });
 
+app.delete("/delete-user", function (req, res, next) {
+    console.log("delete function executed");
+    if (checkKeys(req.body, ["name", "password"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").find({ name: req.body.name }).toArray(function (err, results) {
+                var loggedIn = false;
+                for (var result in results) {
+                    if (err) throw err;
+                    if (sha512.sha512(req.body.password) === results[result].password) {
+                        db.db("excersize-db").collection("users").deleteOne({ name: req.body.name }, function(err, res) {
+                            if (err) throw err;
+                            if (res.deletedCount > 0) {
+                                res.send("deleted successfully");
+                            } else {
+                                res.send("failed to delete user");
+                            }
+                        });
+                    }
+                }
+                if (!loggedIn) {
+                    res.send("failed to delete user");
+                }
+            });
+            db.close();
+        });
+    } else {
+        res.send("please send a username and password");
+    }
+});
+
+app.put("/update-user-info", function(req, res, next) {
+    console.log("updating user...");
+    if (checkKeys(req.body, ["oldName", "oldPassword", "oldFirstName", "oldLastName", "newName", "newPassword", "newFirstName", "newLastName"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").find({ name: req.body.oldName }).toArray(function (err, results) {
+                var loggedIn = false;
+                for (var result in results) {
+                    if (err) throw err;
+                    if (sha512.sha512(req.body.oldPassword) === results[result].password) {
+                        var user = new User().genUserFromObject(results[result]);
+                        user.name = req.body.newName;
+                        user.password = sha512.sha512(req.body.newPassword);
+                        user.firstName = req.body.newFirstName;
+                        user.lastName = req.body.newLastName;
+                        db.db("excersize.db").collection("users").updateOne({ name: req.body.oldName },
+                            { $set: {
+                                name: user.name,
+                                password: user.password,
+                                firstName: user.firstName,
+                                lastName: user.lastName
+                            }},
+                            function(err, result) {
+                                if(err) throw err;
+                                if (result.modifiedCount > 0) {
+                                    res.send("user updated");
+                                } else {
+                                    res.send("user failed to update");
+                                }
+                            }
+                        )
+                    }
+                }
+                if (!loggedIn) {
+                    res.send("failed to delete user");
+                }
+            });
+            db.close();
+        });
+    } else {
+        res.send("please send new and old info");
+    }
+})
+
 app.post("/sign-up", function (req, res, next) {
     console.log("sign-up function executed");
     if (checkKeys(req.body, ["name", "firstName", "lastName", "password"])) {
@@ -97,6 +180,7 @@ app.post("/step", function (req, res, next) {
             db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
                 var user = (new User()).genUserFromObject(result);
                 user.step();
+                console.log(`${req.body.name} made progress! goal type ${user.goal.goalType}; steps: ${user.steps}; progress: ${user.goal.goalProgress}`);
                 db.db("excersize-db").collection("users").updateOne(
                     { name: user.name },
                     {
@@ -112,7 +196,6 @@ app.post("/step", function (req, res, next) {
                     },
                     function (err, result) {
                         if (err) throw err;
-                        console.log(user.name + " took a step");
                         res.send("updated");
                     }
                 );
