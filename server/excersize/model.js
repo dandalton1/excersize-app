@@ -28,7 +28,13 @@ class User {
 
     step() {
         this.steps++;
-        this.goal.calculateProgress(this);
+        if (this.goal) {
+            let g = new Goal();
+            g.goalProgress = this.goal.goalProgress;
+            g.goalType = this.goal.goalType;
+            g.goalValue = this.goal.goalValue;
+            g.calculateProgress(this); 
+        }
     }
 
     generate(name, firstName, lastName, password) {

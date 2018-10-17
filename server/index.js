@@ -1,5 +1,6 @@
 const express = require('express');
 const excersize = require('./excersize/controller');
+const expressValidator = require('express-validator');
 
 console.log("loading...");
 
@@ -12,6 +13,7 @@ app.set("view engine", "ejs");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(expressValidator());
 app.use("/static", express.static("static"));
 app.use(excersize);
 app.use(function (req, res, next) {

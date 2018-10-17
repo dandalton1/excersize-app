@@ -99,7 +99,17 @@ app.post("/step", function (req, res, next) {
                 user.step();
                 db.db("excersize-db").collection("users").updateOne(
                     { name: user.name },
-                    { $set: { steps: user.steps } },
+                    {
+                        $set:
+                        {
+                            steps: user.steps, 
+                            goal: {
+                                goalType: user.goal.goalType,
+                                goalValue: user.goal.goalValue,
+                                goalProgress: user.goal.goalProgress
+                            }
+                        }
+                    },
                     function (err, result) {
                         if (err) throw err;
                         console.log(user.name + " took a step");
@@ -114,7 +124,7 @@ app.post("/step", function (req, res, next) {
 });
 
 app.post("/set-info", function (req, res, next) {
-    if (checkKeys(req.body, ["name", "height", "weight"])) {
+    if (checkKeys(req.body, ["name", "height", "weight", "stride-length"])) {
         mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
             if (err) throw err;
             db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
@@ -127,19 +137,19 @@ app.post("/set-info", function (req, res, next) {
                     { $set: { height: user.height, weight: user.weight } },
                     function (err, result) {
                         if (err) throw err;
-                        console.log(user.name + " updated info; height is " + user.height + "; weight is " + user.weight);
+                        console.log(user.name + " updated info");
                         res.send("updated successfully");
                     }
                 );
             });
         });
     } else {
-        res.send("please include a name, height, and weight");
+        res.send("please include a name, height, stride length, and weight");
     }
 });
 
 app.post("/set-goal", function (req, res, next) {
-    if (checkKeys(req.body, ["name, goalType, goalValue"])) {
+    if (checkKeys(req.body, ["name", "goalType", "goalValue"])) {
         mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
             if (err) throw err;
             db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
@@ -154,7 +164,7 @@ app.post("/set-goal", function (req, res, next) {
                             goal: {
                                 goalType: user.goal.goalType,
                                 goalValue: user.goal.goalValue,
-                                progress: user.goal.goalProgress
+                                goalProgress: user.goal.goalProgress
                             }
                         }
                     },
