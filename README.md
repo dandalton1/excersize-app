@@ -9,3 +9,6 @@ Allow yourself to set goals for your routine. Want to lose weight? Set a goal!
 
 # Calorie Counter
 Add food and other exercise in, and keep a track of it, so you know how you're achieving your goal.
+
+# API Documentation
+Oh yeah, and the app has a fully functional API. Please, see [the documentation](API.README.md).

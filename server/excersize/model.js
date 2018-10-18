@@ -11,6 +11,7 @@ class User {
         this.steps = 0;
         this.strideLength = 0;
         this.goal = null;
+        this.friends = [];
     }
 
     genUserFromObject(o) {
@@ -23,6 +24,7 @@ class User {
         this.steps = o.steps;
         this.goal = o.goal;
         this.strideLength = o.strideLength;
+        this.friends = o.friends;
         return this;
     }
 

@@ -48,18 +48,18 @@ app.post("/login", function (req, res, next) {
                     if (err) throw err;
                     if (sha512.sha512(req.body.password) === results[result].password) {
                         // login();
-                        res.send("logged in as " + results[result].name);
+                        res.send("true");
                         loggedIn = true;
                     }
                 }
                 if (!loggedIn) {
-                    res.send("failed to log in");
+                    res.send("false");
                 }
             });
             db.close();
         });
     } else {
-        res.send("please send a username and password");
+        res.send("false");
     }
 });
 
@@ -73,30 +73,30 @@ app.delete("/delete-user", function (req, res, next) {
                 for (var result in results) {
                     if (err) throw err;
                     if (sha512.sha512(req.body.password) === results[result].password) {
-                        db.db("excersize-db").collection("users").deleteOne({ name: req.body.name }, function(err, res) {
+                        db.db("excersize-db").collection("users").deleteOne({ name: req.body.name }, function (err, result) {
                             if (err) throw err;
-                            if (res.deletedCount > 0) {
-                                res.send("deleted successfully");
+                            if (result.deletedCount > 0) {
+                                res.send("true");
                             } else {
-                                res.send("failed to delete user");
+                                res.send("false");
                             }
+                            db.close();
                         });
+                        loggedIn = true;
                     }
                 }
                 if (!loggedIn) {
-                    res.send("failed to delete user");
+                    res.send("false");
                 }
             });
-            db.close();
         });
     } else {
-        res.send("please send a username and password");
+        res.send("false");
     }
 });
 
-app.put("/update-user-info", function(req, res, next) {
-    console.log("updating user...");
-    if (checkKeys(req.body, ["oldName", "oldPassword", "oldFirstName", "oldLastName", "newName", "newPassword", "newFirstName", "newLastName"])) {
+app.put("/update-user-info", function (req, res, next) {
+    if (checkKeys(req.body, ["oldName", "oldPassword", "newName", "newPassword", "newFirstName", "newLastName"])) {
         mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
             if (err) throw err;
             db.db("excersize-db").collection("users").find({ name: req.body.oldName }).toArray(function (err, results) {
@@ -104,37 +104,42 @@ app.put("/update-user-info", function(req, res, next) {
                 for (var result in results) {
                     if (err) throw err;
                     if (sha512.sha512(req.body.oldPassword) === results[result].password) {
+                        console.log("updating user " + req.body.oldName + "...");
                         var user = new User().genUserFromObject(results[result]);
                         user.name = req.body.newName;
                         user.password = sha512.sha512(req.body.newPassword);
                         user.firstName = req.body.newFirstName;
                         user.lastName = req.body.newLastName;
-                        db.db("excersize.db").collection("users").updateOne({ name: req.body.oldName },
-                            { $set: {
-                                name: user.name,
-                                password: user.password,
-                                firstName: user.firstName,
-                                lastName: user.lastName
-                            }},
-                            function(err, result) {
-                                if(err) throw err;
+                        db.db("excersize-db").collection("users").updateOne({ name: req.body.oldName },
+                            {
+                                $set: {
+                                    name: user.name,
+                                    password: user.password,
+                                    firstName: user.firstName,
+                                    lastName: user.lastName
+                                }
+                            },
+                            function (err, result) {
+                                if (err) throw err;
                                 if (result.modifiedCount > 0) {
-                                    res.send("user updated");
+                                    res.send("true");
                                 } else {
-                                    res.send("user failed to update");
+                                    res.send("false");
                                 }
                             }
                         )
+                        loggedIn = true;
+                        db.close();
                     }
                 }
                 if (!loggedIn) {
-                    res.send("failed to delete user");
+                    res.send("false");
+                    db.close();
                 }
             });
-            db.close();
         });
     } else {
-        res.send("please send new and old info");
+        res.send("false");
     }
 })
 
@@ -153,7 +158,6 @@ app.post("/sign-up", function (req, res, next) {
             db.db("excersize-db").collection("users").find({ name: newUser.name }).toArray(function (err, results) {
                 if (err) throw err;
                 for (var result in results) {
-                    console.log("result name: " + results[result].name + "; new name: " + newUser.name);
                     if (results[result].name === newUser.name) {
                         foundUser = true;
                     }
@@ -161,14 +165,14 @@ app.post("/sign-up", function (req, res, next) {
                 // if statement has to be in here because database lookups are synchronous to server-side js
                 if (foundUser == false) {
                     db.db("excersize-db").collection("users").insertOne(newUser);
-                    res.send("New user created.");
+                    res.send("true");
                 } else {
-                    res.send("Please pick a different username.");
+                    res.send("false");
                 }
             });
         });
     } else {
-        res.send("Error: check to see if you entered in your username, first name, last name, and a password.");
+        res.send("false");
     }
 });
 
@@ -186,7 +190,7 @@ app.post("/step", function (req, res, next) {
                     {
                         $set:
                         {
-                            steps: user.steps, 
+                            steps: user.steps,
                             goal: {
                                 goalType: user.goal.goalType,
                                 goalValue: user.goal.goalValue,
@@ -196,13 +200,13 @@ app.post("/step", function (req, res, next) {
                     },
                     function (err, result) {
                         if (err) throw err;
-                        res.send("updated");
+                        res.send("true");
                     }
                 );
             });
         });
     } else {
-        res.send("name not provided");
+        res.send("false");
     }
 });
 
@@ -221,13 +225,13 @@ app.post("/set-info", function (req, res, next) {
                     function (err, result) {
                         if (err) throw err;
                         console.log(user.name + " updated info");
-                        res.send("updated successfully");
+                        res.send("true");
                     }
                 );
             });
         });
     } else {
-        res.send("please include a name, height, stride length, and weight");
+        res.send("false");
     }
 });
 
@@ -255,13 +259,13 @@ app.post("/set-goal", function (req, res, next) {
                         if (err) throw err;
                         console.log(user.name + " updated goal:");
                         console.log(user.goal);
-                        res.send("goal updated");
+                        res.send("true");
                     }
                 );
             });
         });
     } else {
-        res.send("Please send a name, a goal type, and a goal value.");
+        res.send("false");
     }
 });
 
@@ -306,5 +310,84 @@ app.post("/get-first-name", function (req, res, next) {
         res.send("username required");
     }
 });
+
+app.post("/add-friend", function (req, res, next) {
+    if (checkKeys(req.body, ["name", "friendName"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                if (err) throw err;
+                var user = (new User()).genUserFromObject(result);
+                var hasFriend = false;
+                for (var f in user.friends) {
+                    if (user.friends[f] === req.body.friendName) {
+                        hasFriend = true;
+                    }
+                }
+                if (!hasFriend) {
+                    user.friends.push(req.body.friendName);
+                    db.db("excersize-db").collection("users").updateOne(
+                        { name: user.name },
+                        { $set: { friends: user.friends } },
+                        function (err, result) {
+                            if (err) throw err;
+                            if (result.modifiedCount > 0) {
+                                console.log(`${user.name} added ${req.body.friendName}`)
+                                res.send("added");
+                            } else {
+                                res.send("unsuccessful");
+                            }
+                        }
+                    );
+                } else {
+                    res.send("user already has friend");
+                }
+            });
+        });
+    } else {
+        res.send("please include a name and friend name");
+    }
+})
+
+app.post("/get-friends", function (req, res, next) {
+    if (checkKeys(req.body, ["name"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                if (err) throw err;
+                var user = (new User()).genUserFromObject(result);
+                res.send(user.friends);
+            });
+        });
+    } else {
+        res.send("please include a name");
+    }
+});
+
+app.post("/should-display-data", function(req, res, next) {
+    if (checkKeys(req.body, ["name", "friendName"])) {
+        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+            if (err) throw err;
+            db.db("excersize-db").collection("users").findOne({ name: req.body.name }, function (err, result) {
+                if (err) throw err;
+                var user = (new User()).genUserFromObject(result);
+                if (user.friends.includes(req.body.friendName)) {
+                    db.db("excersize-db").collection("users").findOne({ name: req.body.friendName }, function (err, result) {
+                        if (err) throw err;
+                        if (result.friends.includes(user.name)) {
+                            res.send("true");
+                        } else {
+                            res.send("false");
+                        }
+                    });
+                } else {
+                    res.send("false");
+                }
+            });
+        });
+    } else {
+        res.send("please include a name and friend name");
+    }
+})
 
 module.exports = app;
