@@ -20,8 +20,7 @@ let url = `mongodb://${db_host}:${db_port}/${db_name}`;
 mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
     if (err) throw err;
     console.log("database created");
-    var dbo = db.db("excersize-db");
-    dbo.createCollection("users", function (err, res) {
+    db.db("excersize-db").createCollection("users", function (err, res) {
         if (err) throw err;
         console.log("created users collection");
         db.close();
@@ -164,8 +163,15 @@ app.post("/sign-up", function (req, res, next) {
                 }
                 // if statement has to be in here because database lookups are synchronous to server-side js
                 if (foundUser == false) {
-                    db.db("excersize-db").collection("users").insertOne(newUser);
-                    res.send("true");
+                    db.db("excersize-db").collection("users").insertOne(newUser, function(err, result) {
+                        if (err) throw err;
+                        if (result.insertedCount > 0) {
+                            res.send("true");
+                        } else {
+                            res.send("false");
+                        }
+                        db.close();
+                    });
                 } else {
                     res.send("false");
                 }
@@ -293,7 +299,7 @@ app.post("/get-name", function (req, res, next) {
             });
         });
     } else {
-        res.send("username required");
+        res.send("false");
     }
 });
 
@@ -307,7 +313,7 @@ app.post("/get-first-name", function (req, res, next) {
             });
         });
     } else {
-        res.send("username required");
+        res.send("false");
     }
 });
 
