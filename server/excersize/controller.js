@@ -8,7 +8,7 @@ const { checkKeys } = require("../utils");
 const app = express.Router();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", function (req, res, next) {
     res.render("index");
