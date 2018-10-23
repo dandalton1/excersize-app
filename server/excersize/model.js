@@ -14,17 +14,15 @@ class User {
         this.friends = [];
     }
 
+    verify(user, password) {
+        return (sha512.sha512(user.password) === password);
+    }
+
     genUserFromObject(o) {
-        this.password = o.password;
-        this.name = o.name;
-        this.firstName = o.firstName;
-        this.lastName = o.lastName;
-        this.height = o.height;
-        this.weight = o.weight;
-        this.steps = o.steps;
-        this.goal = o.goal;
-        this.strideLength = o.strideLength;
-        this.friends = o.friends;
+        var keys = Object.keys(o);
+        for (var key in keys) {
+            this[keys[key]] = o[keys[key]];
+        }
         return this;
     }
 
@@ -59,11 +57,11 @@ class Goal {
     calculateProgress(user) {
         switch (this.goalType) {
             case GoalTypes.MILES: {
-                this.goalProgress = (((1 / (12 / user.strideLength)) / 5280) * steps) / this.goalValue;
+                this.goalProgress = (((1 / (12 / user.strideLength)) / 5280) * user.steps) / this.goalValue;
                 break;
             }
             case GoalTypes.STEPS: {
-                this.goalProgress = steps / this.goalValue;
+                this.goalProgress = user.steps / this.goalValue;
                 break;
             }
             case GoalTypes.WEIGHT_LOSS: {
@@ -84,8 +82,8 @@ class Goal {
     }
 
     createNewGoal(goalType, goalValue) {
-        this.goalType = goalType;
-        this.goalValue = goalValue;
+        this.goalType = parseInt(goalType);
+        this.goalValue = parseInt(goalValue);
         this.goalProgress = 0;
         return this;
     }
