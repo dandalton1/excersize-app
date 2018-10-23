@@ -13,6 +13,8 @@ let db_host = "localhost";
 let db_name = "excersize-db";
 let url = `mongodb://${db_host}:${db_port}/${db_name}`;
 
+let database = null;
+
 class Database {
     constructor() {
         this.init();
@@ -25,40 +27,29 @@ class Database {
             db.db("excersize-db").createCollection("users", function (err, res) {
                 if (err) throw err;
                 console.log("created users collection");
+                database = db;
             });
         });
     }
 
     lookup(user, callback) {
-        mongo.connect(url, { useNewUrlParser: true, noDelay: true }, function (err, db) {
-            if (err) throw err;
-            db.db("excersize-db").collection("users").findOne({ name: user.name }, function (err, result) {
-                if (err) { throw err; }
-                callback(err, result);
-            });
-            db.close();
+        database.db("excersize-db").collection("users").findOne({ name: user.name }, function (err, result) {
+            if (err) { throw err; }
+            callback(err, result);
         });
     }
 
     delete(user, callback) {
-        mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
-            if (err) throw err;
-            db.db("excersize-db").collection("users").deleteOne({ name: user.name }, callback);
-            db.close();
-        });
+        database.db("excersize-db").collection("users").deleteOne({ name: user.name }, callback);
     }
 
     update(user, newUser, callback) {
         this.lookup(user, function (err, result) {
             if (err) throw err;
             if (result.name === user.name) {
-                mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+                database.db("excersize-db").collection("users").updateOne({ name: user.name }, { $set: newUser }, function (err, result) {
                     if (err) throw err;
-                    db.db("excersize-db").collection("users").updateOne({ name: user.name }, { $set: newUser }, function (err, result) {
-                        if (err) throw err;
-                        callback(result.modifiedCount > 0);
-                        db.close();
-                    });
+                    callback(result.modifiedCount > 0);
                 });
             } else {
                 callback(false);
@@ -74,13 +65,9 @@ class Database {
                     callback(false);
                 }
             } else {
-                mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
+                database.db("excersize-db").collection("users").insertOne(user, function (err, result) {
                     if (err) throw err;
-                    db.db("excersize-db").collection("users").insertOne(user, function (err, result) {
-                        if (err) throw err;
-                        callback(result.insertedCount > 0);
-                        db.close();
-                    });
+                    callback(result.insertedCount > 0);
                 });
             }
         });
