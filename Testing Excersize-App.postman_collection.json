@@ -1,0 +1,1007 @@
+{
+	"info": {
+		"_postman_id": "8db1a36d-5d48-40b6-b84a-80b0af6609b0",
+		"name": "Testing Excersize-App",
+		"description": "Testing my Excersize Application API for Web Programming.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign up",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f58ba39b-2b87-457c-bbee-8c1df83ad14f",
+						"exec": [
+							"pm.test(\"Signed up as Jeff\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "firstName",
+							"value": "Jeffrey",
+							"type": "text"
+						},
+						{
+							"key": "lastName",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/sign-up",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"sign-up"
+					]
+				},
+				"description": "Sign up as a user named Jeffrey Jeff, with user name \"Jeff\", and password \"Jeff\"."
+			},
+			"response": []
+		},
+		{
+			"name": "Log in",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b7b64976-1c15-497e-a80c-e4a2cd18041c",
+						"exec": [
+							"pm.test(\"Able to log in as Jeff\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Log in as that same Jeff (using Jeff as the username and \"Jeff\" as the password"
+			},
+			"response": []
+		},
+		{
+			"name": "Update information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a5003aaf-65b7-4f2c-8df1-a11e2b1b2700",
+						"exec": [
+							"pm.test(\"Jeff is able to update his information\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "oldName",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "oldPassword",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "newName",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "newPassword",
+							"value": "Jeff1",
+							"type": "text"
+						},
+						{
+							"key": "newFirstName",
+							"value": "Jeffrey",
+							"type": "text"
+						},
+						{
+							"key": "newLastName",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/update-user-info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"update-user-info"
+					]
+				},
+				"description": "Jeff wants to update his password to \"Jeff1\"."
+			},
+			"response": []
+		},
+		{
+			"name": "Add more information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "71b97d18-d0c9-4cf1-9e0f-cb8a86c757f6",
+						"exec": [
+							"pm.test(\"Jeff is able to add more information\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "height",
+							"value": "60",
+							"type": "text"
+						},
+						{
+							"key": "weight",
+							"value": "250",
+							"type": "text"
+						},
+						{
+							"key": "strideLength",
+							"value": "11",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/set-info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"set-info"
+					]
+				},
+				"description": "Jeff wants to add more information."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Jeff's name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "31137515-9b08-4876-bab9-b7d8a72f138d",
+						"exec": [
+							"pm.test(\"Jeff's name is \\\"Jeffrey Jeff\\\"\", function () {",
+							"    pm.response.to.have.body(\"Jeffrey Jeff\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/get-name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"get-name"
+					]
+				},
+				"description": "Jeff should be able to see his name."
+			},
+			"response": []
+		},
+		{
+			"name": "Get First Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3b85def-d5e3-45d0-8730-65d9287e874d",
+						"exec": [
+							"pm.test(\"Jeff is able to see his name is Jeffrey\", function () {",
+							"    pm.response.to.have.body(\"Jeffrey\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/get-first-name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"get-first-name"
+					]
+				},
+				"description": "Jeff should see his first name is Jeffrey."
+			},
+			"response": []
+		},
+		{
+			"name": "Add Goal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "46680ab5-3f1a-46c6-9d04-8685e7e7347c",
+						"exec": [
+							"pm.test(\"Jeff is able to update his information\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "goalType",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "goalValue",
+							"value": "5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/set-goal",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"set-goal"
+					]
+				},
+				"description": "Jeff wants to create a goal of walking 5 miles."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Goal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e9a90a69-6b37-430d-9795-af3da435592c",
+						"exec": [
+							"pm.test(\"Goal Type: Miles (2)\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goalType).to.eql(2);",
+							"});",
+							"",
+							"pm.test(\"Goal Value: 5 Miles\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goalValue).to.eql(5);",
+							"});",
+							"",
+							"pm.test(\"Goal Type: Progress (0)\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goalProgress).to.eql(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/get-goal",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"get-goal"
+					]
+				},
+				"description": "Jeff wants to know what his new goal is."
+			},
+			"response": []
+		},
+		{
+			"name": "Step",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b6119a2c-db4d-4fe6-b209-8a775e64421b",
+						"exec": [
+							"pm.test(\"Jeff is able to take a step\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/step",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"step"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ben - Sign up",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "065f6530-b09d-4ee8-9ab0-bf3c89d2467f",
+						"exec": [
+							"pm.test(\"Signed up as Ben\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Ben",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Ben",
+							"type": "text"
+						},
+						{
+							"key": "firstName",
+							"value": "Ben",
+							"type": "text"
+						},
+						{
+							"key": "lastName",
+							"value": "Ten",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/sign-up",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"sign-up"
+					]
+				},
+				"description": "Sign up a second user named \"Ben\" with password \"Ben\""
+			},
+			"response": []
+		},
+		{
+			"name": "Jeff - Add Ben as friend",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "502a96e0-d280-462b-bcc1-a860f924284d",
+						"exec": [
+							"pm.test(\"Jeff is able to add Ben\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "friendName",
+							"value": "Ben",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/add-friend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"add-friend"
+					]
+				},
+				"description": "Add Ben as a friend as Jeff"
+			},
+			"response": []
+		},
+		{
+			"name": "Ben - Add Jeff as friend",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "05cd2ed0-499f-4a66-9b88-2e7f39e8bef0",
+						"exec": [
+							"pm.test(\"Ben is able to add Jeff\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Ben",
+							"type": "text"
+						},
+						{
+							"key": "friendName",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/add-friend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"add-friend"
+					]
+				},
+				"description": "Let's be friends!"
+			},
+			"response": []
+		},
+		{
+			"name": "Jeff - See friends",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f7f96e2c-b9c4-49da-94ae-f84f4f261725",
+						"exec": [
+							"pm.test(\"Jeff is able to see friends\", function () {",
+							"    pm.response.to.have.body(\"[\\\"Ben\\\"]\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/get-friends",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"get-friends"
+					]
+				},
+				"description": "Jeff should be able to see Ben as his friend."
+			},
+			"response": []
+		},
+		{
+			"name": "Jeff is able to see Ben's data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "36908407-4c7b-4505-ac87-e0b2fddfa7ff",
+						"exec": [
+							"pm.test(\"Jeff is able to see Ben's data\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "friendName",
+							"value": "Ben",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/should-display-data",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"should-display-data"
+					]
+				},
+				"description": "Jeff and Ben are friends. Why not?"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "375ff162-c6e4-4526-a738-ee13037433f5",
+						"exec": [
+							"pm.test(\"Jeff is able to delete account\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Jeff",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Jeff1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/delete-user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"delete-user"
+					]
+				},
+				"description": "Jeff got mad at the server and wants to delete his account."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Ben",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "375ff162-c6e4-4526-a738-ee13037433f5",
+						"exec": [
+							"pm.test(\"Ben is able to delete account\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Ben",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Ben",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/delete-user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"delete-user"
+					]
+				},
+				"description": "Ben got mad at the server and wants to delete his account."
+			},
+			"response": []
+		}
+	]
+}
