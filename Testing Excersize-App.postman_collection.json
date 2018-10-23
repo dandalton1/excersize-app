@@ -16,6 +16,10 @@
 						"exec": [
 							"pm.test(\"Signed up as Jeff\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -81,6 +85,10 @@
 						"exec": [
 							"pm.test(\"Able to log in as Jeff\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -136,6 +144,10 @@
 						"exec": [
 							"pm.test(\"Jeff is able to update his information\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -211,6 +223,11 @@
 						"exec": [
 							"pm.test(\"Jeff is able to add more information\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -276,6 +293,11 @@
 						"exec": [
 							"pm.test(\"Jeff's name is \\\"Jeffrey Jeff\\\"\", function () {",
 							"    pm.response.to.have.body(\"Jeffrey Jeff\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -326,6 +348,11 @@
 						"exec": [
 							"pm.test(\"Jeff is able to see his name is Jeffrey\", function () {",
 							"    pm.response.to.have.body(\"Jeffrey\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -376,6 +403,11 @@
 						"exec": [
 							"pm.test(\"Jeff is able to update his information\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -447,6 +479,11 @@
 							"pm.test(\"Goal Type: Progress (0)\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.goalProgress).to.eql(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -497,6 +534,11 @@
 						"exec": [
 							"pm.test(\"Jeff is able to take a step\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -531,12 +573,6 @@
 					],
 					"path": [
 						"step"
-					],
-					"query": [
-						{
-							"key": "",
-							"value": ""
-						}
 					]
 				}
 			},
@@ -552,6 +588,11 @@
 						"exec": [
 							"pm.test(\"Signed up as Ben\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -617,6 +658,11 @@
 						"exec": [
 							"pm.test(\"Jeff is able to add Ben\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -672,6 +718,12 @@
 						"exec": [
 							"pm.test(\"Ben is able to add Jeff\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -727,6 +779,11 @@
 						"exec": [
 							"pm.test(\"Jeff is able to see friends\", function () {",
 							"    pm.response.to.have.body(\"[\\\"Ben\\\"]\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -777,6 +834,11 @@
 						"exec": [
 							"pm.test(\"Jeff is able to see Ben's data\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -832,6 +894,11 @@
 						"exec": [
 							"pm.test(\"Jeff is able to delete account\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -887,6 +954,10 @@
 						"exec": [
 							"pm.test(\"Ben is able to delete account\", function () {",
 							"    pm.response.to.have.body(\"true\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"

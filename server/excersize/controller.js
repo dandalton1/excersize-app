@@ -15,7 +15,6 @@ app.get("/", function (req, res, next) {
 });
 
 app.post("/login", function (req, res, next) {
-    console.log("login function executed");
     if (checkKeys(req.body, ["name", "password"])) {
         let user = new User();
         user.name = req.body.name;
@@ -30,7 +29,6 @@ app.post("/login", function (req, res, next) {
 });
 
 app.delete("/delete-user", function (req, res, next) {
-    console.log("delete function executed");
     if (checkKeys(req.body, ["name", "password"])) {
         let user = new User();
         user.name = req.body.name;
@@ -69,7 +67,6 @@ app.put("/update-user-info", function (req, res, next) {
 })
 
 app.post("/sign-up", function (req, res, next) {
-    console.log("sign-up function executed");
     if (checkKeys(req.body, ["name", "firstName", "lastName", "password"])) {
         var name = req.body.name;
         var firstName = req.body.firstName;
