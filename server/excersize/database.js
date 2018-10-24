@@ -13,7 +13,7 @@ let db_host = "localhost";
 let db_name = "excersize-db";
 let url = `mongodb://${db_host}:${db_port}/${db_name}`;
 
-let database = null;
+let collection = null;
 
 class Database {
     constructor() {
@@ -27,27 +27,27 @@ class Database {
             db.db("excersize-db").createCollection("users", function (err, res) {
                 if (err) throw err;
                 console.log("created users collection");
-                database = db;
+                collection = db.db("excersize-db").collection("users");
             });
         });
     }
 
     lookup(user, callback) {
-        database.db("excersize-db").collection("users").findOne({ name: user.name }, function (err, result) {
+        collection.findOne({ name: user.name }, function (err, result) {
             if (err) { throw err; }
             callback(err, result);
         });
     }
 
     delete(user, callback) {
-        database.db("excersize-db").collection("users").deleteOne({ name: user.name }, callback);
+        collection.deleteOne({ name: user.name }, callback);
     }
 
     update(user, newUser, callback) {
         this.lookup(user, function (err, result) {
             if (err) throw err;
             if (result.name === user.name) {
-                database.db("excersize-db").collection("users").updateOne({ name: user.name }, { $set: newUser }, function (err, result) {
+                collection.updateOne({ name: user.name }, { $set: newUser }, function (err, result) {
                     if (err) throw err;
                     callback(result.modifiedCount > 0);
                 });
@@ -65,7 +65,7 @@ class Database {
                     callback(false);
                 }
             } else {
-                database.db("excersize-db").collection("users").insertOne(user, function (err, result) {
+                collection.insertOne(user, function (err, result) {
                     if (err) throw err;
                     callback(result.insertedCount > 0);
                 });
