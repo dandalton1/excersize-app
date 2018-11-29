@@ -1,10 +1,5 @@
 This API documentation describes what
 
-    GET /
-Renders `index.ejs` and shows it to a user.
-Required parameters: none
-Result: `index.ejs` as a render.
-
     POST /login
 Allows a user to log in.
 Required parameters: `name`, `password`

@@ -10,10 +10,6 @@ const app = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", function (req, res, next) {
-    res.render("index");
-});
-
 app.post("/login", function (req, res, next) {
     if (checkKeys(req.body, ["name", "password"])) {
         let user = new User();
