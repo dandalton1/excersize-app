@@ -39,7 +39,8 @@
     "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "esversion": 6
   },
   "postcss": {
     "plugins": {

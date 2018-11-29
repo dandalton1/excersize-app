@@ -21,6 +21,13 @@ const server = "localhost";
 app.set("view engine", "ejs");
 console.log(`set view engine to ejs (${(new Date()).getTime() - startTime.getTime()} ms)`)
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "*");
+    next();
+});
+console.log(`added header policy (fixing cors) (${(new Date()).getTime() - startTime.getTime()} ms)`)
+
 app.use(express.json());
 console.log(`loaded express json parser (${(new Date()).getTime() - startTime.getTime()} ms)`)
 
