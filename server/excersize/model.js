@@ -67,7 +67,7 @@ class Goal {
             case GoalTypes.WEIGHT_LOSS: {
                 // formula: https://www.livestrong.com/article/238020-how-to-convert-pedometer-steps-to-calories/
                 // 3500 cal = 1 lb loss
-                let stepsInAMile = 5280. * (strideLength / 12);
+                let stepsInAMile = 5280. * (user.strideLength / 12);
                 let calPerMile = 0.57 * user.weight;
                 let lbPerMile = calPerMile / 3500.;
                 let lbPerStep = lbPerMile / stepsInAMile;
