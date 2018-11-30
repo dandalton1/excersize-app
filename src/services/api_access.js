@@ -5,11 +5,26 @@ export function login(username, password) {
     return myFetch(`${api_root}/login`, {
         name: username,
         password: password
-    }).then(x => {
+    }).then(function(x) {
         if (x === "true") {
             this.username = username;
         }
+        return x;
     });
+}
+
+export function signup(username, password, firstName, lastName) {
+  return myFetch(`${api_root}/sign-up`, {
+      name: username,
+      password: password,
+      firstName: firstName,
+      lastName: lastName
+  }).then(function (x) {
+      if (x === "true") {
+          this.username = username;
+      }
+      return x;
+  });
 }
 
 function myFetch(url = ``, data = null, method = null) {

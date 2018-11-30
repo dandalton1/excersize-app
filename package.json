@@ -38,9 +38,9 @@
     ],
     "rules": {},
     "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "esversion": 6
+      "parser": "babel-eslint",
+      "ecmaVersion": 6
+    }
   },
   "postcss": {
     "plugins": {

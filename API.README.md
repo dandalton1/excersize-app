@@ -1,4 +1,4 @@
-This API documentation describes what
+# This describes what can be done with the API
 
     POST /login
 Allows a user to log in.

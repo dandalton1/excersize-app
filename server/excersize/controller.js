@@ -17,7 +17,11 @@ app.post("/login", function (req, res, next) {
         user.password = sha512.sha512(req.body.password);
         database.lookup(user, function (err, result) {
             if (err) throw err;
-            res.send(user.password === result.password);
+            if (result) {
+                res.send(user.password === result.password);
+            } else {
+                res.send("false");
+            }
         });
     } else {
         res.send("false");

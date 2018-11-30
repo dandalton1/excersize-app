@@ -7,6 +7,12 @@
             <li class="nav-item">
                 <router-link class="nav-link" exact-active-class="active" to="/about">About</router-link>
             </li>
+            <li class="nav-item">
+                <router-link class="nav-link" exact-active-class="active" to="/login">Log In</router-link>
+            </li>
+            <li class="nav-item">
+                <router-link class="nav-link" exact-active-class="active" to="/sign-up">Sign Up</router-link>
+            </li>
         </ul>
     </nav>
 </template>

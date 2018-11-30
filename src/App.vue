@@ -5,20 +5,11 @@
         Excersize App
       </div>
       <div class="col" style="text-align: right;">
-        <span v-if="username === null">
-          <div class="btn btn-primary" @click.prevent="login">
-            Sign Up
-          </div>
-          &nbsp;
-          <div class="btn btn-secondary" @click.prevent="login">
-            Log in
-          </div>
-        </span>
-        <span v-else>Welcome back, ${name}!</span>
+        <span v-if="username !== null">Welcome back, {{readableName}}!</span>
       </div>
     </div>
     <Nav />
-    <div id="alert-pane"></div>
+    <div id="alert-pane" style="position: sticky;"></div>
     <router-view />
   </div>
 </template>
@@ -31,27 +22,18 @@ export default {
   name: "app",
   data: function () {
     return {
-      readableName: ""
+      info: {
+        readableName: "",
+        firstName: "",
+        lastName: ""
+      }
     }
   },
   components: {
     Nav: Nav
   },
   methods: {
-    bringUpPane() {
-
-    },
-    login() {
-      api.login().then(function(result) {
-        if (result === "true") {
-          document.getElementById("alert-pane").className = "alert alert-success";
-          document.getElementById("alert-pane").innerText = "Login suceeded!";
-        } else {
-          document.getElementById("alert-pane").className = "alert alert-danger";
-          document.getElementById("alert-pane").innerText = "Login failed!";
-        }
-      });
-    }
+    
   },
   computed: {
     username() {

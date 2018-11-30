@@ -1,0 +1,14 @@
+.slideUp {
+    animation-name: slide-up;
+    animation-duration: 0.5s;
+    transform-origin: top;
+}
+
+@keyframes slide-up {
+    0% {
+        transform: scaleY(1);
+    }
+    100% {
+        transform: scaleY(0);
+    }
+}
