@@ -7,31 +7,31 @@
             <li class="nav-item">
                 <router-link class="nav-link" exact-active-class="active" to="/about">About</router-link>
             </li>
-            <li class="nav-item" v-if="username === null">
+            <li class="nav-item" v-if="username === undefined">
                 <router-link class="nav-link" exact-active-class="active" to="/login">Log In</router-link>
             </li>
-            <li class="nav-item" v-if="username === null">
+            <li class="nav-item" v-if="username === undefined">
                 <router-link class="nav-link" exact-active-class="active" to="/sign-up">Sign Up</router-link>
             </li>
         </ul>
-        <span class="navbar-text" v-if="firstName !== null">
+        <span class="navbar-text" v-if="firstName !== undefined">
             Welcome back, {{firstName}}!
         </span>
     </nav>
 </template>
 
 <script>
-import * as api from "@/services/api_access";
+import * as cookieManager from "@/services/cookies";
 export default {
   computed: {
       firstName: {
           get: function() {
-              return api.firstName;
+              return cookieManager.getCookieValue("firstName");
           }
       },
       username: {
           get: function() {
-              return api.uname;
+              return cookieManager.getCookieValue("username");
           }
       }
   }

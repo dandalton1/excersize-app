@@ -163,7 +163,7 @@ app.post("/get-name", function (req, res, next) {
         database.lookup(user, function (err, result) {
             if (err) throw err;
             user = new User().genUserFromObject(result);
-            res.send(`${user.firstName} ${user.lastName}`);
+            res.send(`{"name": "${user.firstName} ${user.lastName}"}`);
         });
     } else {
         res.send("false");
@@ -177,7 +177,7 @@ app.post("/get-first-name", function (req, res, next) {
         database.lookup(user, function (err, result) {
             if (err) throw err;
             user = new User().genUserFromObject(result);
-            res.send(`${user.firstName}`);
+            res.send(`{"firstName": "${user.firstName}"}`);
         });
     } else {
         res.send("false");
@@ -209,7 +209,7 @@ app.post("/add-friend", function (req, res, next) {
     } else {
         res.send("please include a name and friend name");
     }
-})
+});
 
 app.post("/get-friends", function (req, res, next) {
     if (checkKeys(req.body, ["name"])) {
@@ -246,6 +246,6 @@ app.post("/should-display-data", function (req, res, next) {
     } else {
         res.send("false");
     }
-})
+});
 
 module.exports = app;

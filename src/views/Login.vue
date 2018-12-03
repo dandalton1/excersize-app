@@ -16,6 +16,7 @@
 
 <script>
 import * as api from "@/services/api_access";
+import * as cookieManager from "@/services/cookies";
 
 export default {
     name: "login",
@@ -28,6 +29,13 @@ export default {
                 if (result === true) {
                     a.className = "alert alert-success";
                     a.innerText = "Login succeeded. Welcome back!";
+                    cookieManager.setCookie("username", username, 7);
+                    api.getFirstName(username).then(function(result) {
+                        cookieManager.setCookie("firstName", result.firstName, 7);
+                        api.getReadableName(username).then(function(result) {
+                            cookieManager.setCookie("readableName", result.name, 7);
+                        });
+                    });
                 } else {
                     a.className = "alert alert-danger";
                     a.innerText = "Login failed!";
