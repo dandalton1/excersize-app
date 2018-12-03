@@ -13,6 +13,9 @@
             <li class="nav-item" v-if="username === undefined">
                 <router-link class="nav-link" exact-active-class="active" to="/sign-up">Sign Up</router-link>
             </li>
+            <li class="nav-item" v-if="username !== undefined">
+                <router-link class="nav-link" exact-active-class="active" to="/my-account">My Account</router-link>
+            </li>
         </ul>
         <span class="navbar-text" v-if="firstName !== undefined">
             Welcome back, {{firstName}}!
