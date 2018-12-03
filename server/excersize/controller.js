@@ -61,7 +61,7 @@ app.put("/update-user-info", function(req, res, next) {
   ) {
     let user = new User();
     user.name = req.body.oldName;
-    user.password = req.body.oldPassword;
+    user.password = sha512.sha512(req.body.oldPassword);
     let newUser = user;
     newUser.name = req.body.newName;
     newUser.password = sha512.sha512(req.body.newPassword);

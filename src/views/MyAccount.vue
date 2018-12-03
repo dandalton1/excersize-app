@@ -13,7 +13,7 @@
       <input type="number" name="weight">
       <p>Stride length (in inches):</p>
       <input type="number" name="stride-length">
-      <p>Favorite Color:</p>
+      <p>Favorite Color (in hex, or, if applicable, use color picker):</p>
       <input type="color" name="favorite-color">
       <p>&nbsp;</p>
       <input type="submit" class="btn btn-primary">
@@ -34,7 +34,7 @@
       <p>Last Name:</p>
       <input type="text" name="lastName">
       <p>&nbsp;</p>
-      <input type="submit" class="btn btn-primary" value="Update">
+      <input type="submit" class="btn btn-primary" value="Update" @click.prevent="editAccount">
     </form>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
@@ -50,7 +50,47 @@
 </template>
 
 <script>
+import * as api from '@/services/api_access';
+import * as cookieManager from '@/services/cookies';
+
 export default {
-    name: "my-account"
+    name: "my-account",
+    methods: {
+        editAccount() {
+            var formResult = document.getElementsByName("edit-account")[0];
+            api.updateInfo(
+                cookieManager.getCookieValue("username"),
+                formResult[0].value,
+                formResult[2].value,
+                formResult[1].value,
+                formResult[3].value,
+                formResult[4].value
+            ).then(function(result) {
+                var a = document.createElement("div");
+                if (result === true) {
+                    a.className = "alert alert-success";
+                    a.innerText = "Info successfully updated!";
+                    cookieManager.setCookie("username", formResult[2], 7);
+                    api.getFirstName(username).then(function(result) {
+                        cookieManager.setCookie("firstName", result.firstName, 7);
+                        api.getReadableName(username).then(function(result) {
+                            cookieManager.setCookie("readableName", result.name, 7);
+                            window.location = "/";
+                        });
+                    });
+                } else {
+                    a.className = "alert alert-danger";
+                    a.innerText = "Setting information was unsuccessful! Was your password correct?";
+                }
+                document.getElementById("alert-pane").appendChild(a);
+                setTimeout(function() {
+                    a.className += " slideUp";
+                    setTimeout(function() {
+                        document.getElementById("alert-pane").removeChild(a);
+                    }, 500);
+                }, 5000);
+            });
+        }
+    }
 }
 </script>
