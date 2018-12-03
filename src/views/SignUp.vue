@@ -1,20 +1,18 @@
 <template>
-    <div class="jumbotron">
-        <h1>Welcome!</h1>
-        <h2>To sign up, please enter your username, first name, last name, and password.</h2>
-        <p>Username:</p>
-        <input type="text" name="username" />
-        <p>First name:</p>
-        <input type="text" name="firstname" />
-        <p>Last name:</p>
-        <input type="text" name="lastname" />
-        <p>Password:</p>
-        <input type="password" name="password" />
-        <p></p>
-        <div class="btn btn-primary" @click.prevent="signup">
-            Sign Up
-        </div>
-    </div>
+  <div class="jumbotron">
+    <h1>Welcome!</h1>
+    <h2>To sign up, please enter your username, first name, last name, and password.</h2>
+    <p>Username:</p>
+    <input type="text" name="username">
+    <p>First name:</p>
+    <input type="text" name="firstname">
+    <p>Last name:</p>
+    <input type="text" name="lastname">
+    <p>Password:</p>
+    <input type="password" name="password">
+    <p></p>
+    <div class="btn btn-primary" @click.prevent="signup">Sign Up</div>
+  </div>
 </template>
 
 <script>
@@ -39,6 +37,7 @@ export default {
                         cookieManager.setCookie("firstName", result.firstName, 7);
                         api.getReadableName(username).then(function(result) {
                             cookieManager.setCookie("readableName", result.name, 7);
+                            window.location = "/";
                         });
                     });
                 } else {
