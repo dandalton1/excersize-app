@@ -16,7 +16,7 @@
       <p>Favorite Color:</p>
       <input type="color" name="favorite-color">
       <p>&nbsp;</p>
-      <input type="submit" class="btn btn-primary">
+      <button class="btn btn-primary">Submit</button>
     </form>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
@@ -34,7 +34,7 @@
       <p>Last Name:</p>
       <input type="text" name="lastName">
       <p>&nbsp;</p>
-      <input type="submit" class="btn btn-primary" value="Update">
+      <button class="btn btn-primary" @click.prevent="updateInfo">Update</button>
     </form>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
@@ -44,13 +44,16 @@
     <form name="delete-account">
       <input type="password" name="password">
       <p>&nbsp;</p>
-      <input type="submit" class="btn btn-danger" value="Delete Account">
+      <button class="btn btn-danger">Delete Account</button>
     </form>
   </div>
 </template>
 
 <script>
 export default {
-    name: "my-account"
+    name: "my-account",
+    methods: {
+        
+    }
 }
 </script>

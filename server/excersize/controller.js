@@ -61,14 +61,20 @@ app.put("/update-user-info", function(req, res, next) {
   ) {
     let user = new User();
     user.name = req.body.oldName;
-    user.password = req.body.oldPassword;
-    let newUser = user;
-    newUser.name = req.body.newName;
-    newUser.password = sha512.sha512(req.body.newPassword);
-    newUser.firstName = req.body.newFirstName;
-    newUser.lastName = req.body.newLastName;
-    database.update(user, newUser, function(result) {
-      res.send(result);
+    user.password = sha512.sha512(req.body.oldPassword);
+    database.lookup(user, function(err, result) {
+        if (result.password === user.password) {
+            let newUser = user;
+            newUser.name = req.body.newName;
+            newUser.password = sha512.sha512(req.body.newPassword);
+            newUser.firstName = req.body.newFirstName;
+            newUser.lastName = req.body.newLastName;
+            database.update(user, newUser, function(result) {
+            res.send(result);
+            });
+        } else {
+            res.send("false");
+        }
     });
   } else {
     res.send("false");
@@ -124,7 +130,7 @@ app.post("/set-info", function(req, res, next) {
       if (err) throw err;
       var newUser;
       if (user.name === result.name) {
-        newUser = new User().genUserFromObject(result);
+        newUser = new User().genUserFromObject(user).genUserFromObject(result);
         try {
           newUser.height = parseInt(req.body.height);
           newUser.weight = parseInt(req.body.weight);
@@ -138,10 +144,12 @@ app.post("/set-info", function(req, res, next) {
           res.send("false");
         }
       } else {
+        console.log("names don't match");
         res.send("false");
       }
     });
   } else {
+      console.log("fields not existent");
     res.send("false");
   }
 });
