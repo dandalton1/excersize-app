@@ -4,6 +4,14 @@
     transform-origin: top;
 }
 
+a {
+    transition: color 0.25s;
+}
+
+nav {
+    transition: background-color 0.25s;
+}
+
 @keyframes slide-up {
     0% {
         transform: scaleY(1);

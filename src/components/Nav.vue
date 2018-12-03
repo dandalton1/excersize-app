@@ -2,8 +2,9 @@
   <div>
     <span class="navbar-text" v-if="firstName !== undefined">Welcome back, {{firstName}}!</span>
     <nav
-      class="navbar navbar-expand-lg navbar-dark bg-dark"
-      v-bind:style="{ backgroundColor: backgroundColor }"
+      class="navbar navbar-expand-lg"
+      v-bind:class="{ 'navbar-dark': dark, 'navbar-light': !dark }"
+      v-bind:style="{ backgroundColor: favoriteColor }"
     >
       <ul class="nav navbar-nav">
         <li class="nav-item">
@@ -39,7 +40,29 @@
 import * as cookieManager from "@/services/cookies";
 import * as api from "@/services/api_access";
 export default {
-  computed: {
+    data () {
+        return {
+            favoriteColor: "#000000",
+            dark: true
+        }
+    },
+    created () {
+        var ref = this;
+        api.getFavoriteColor(cookieManager.getCookieValue("username")).then(function(response) {
+            ref.favoriteColor = response.favoriteColor;
+
+            // see https://stackoverflow.com/a/12043228/2089760 for how I get this
+            const rgb = response.favoriteColor.substring(1);
+            const r = (rgb >> 16) & 0xff;
+            const g = (rgb >>  8) & 0xff;
+            const b =         rgb & 0xff;
+
+            const lum = (0.2126 * r) + (0.7152 * g) + (0.0722 * b);
+
+            if (lum > 0.5) { ref.dark = false; }
+        });
+    },
+    computed: {
       firstName: {
           get: function() {
               return cookieManager.getCookieValue("firstName");
@@ -48,13 +71,6 @@ export default {
       username: {
           get: function() {
               return cookieManager.getCookieValue("username");
-          }
-      },
-      favoriteColor: {
-          get: function() {
-              return api.getFavoriteColor(cookieManager.getCookieValue("username")).then(function(response) {
-                  return response.favoriteColor;
-              });
           }
       }
   },
