@@ -29,6 +29,23 @@ export function updateInfo(
   );
 }
 
+export function addMoreInfo(username, height, weight, strideLength, color) {
+  return myFetch(`${api_root}/set-info`, {
+    name: username,
+    height: height,
+    weight: weight,
+    strideLength: strideLength,
+    color: color
+  });
+}
+
+export function deleteAccount(username, password) {
+  return myFetch(`${api_root}/delete-user`, {
+    name: username,
+    password: password
+  }, "DELETE");
+}
+
 export function getFirstName(username) {
   return myFetch(`${api_root}/get-first-name`, { name: username });
 }

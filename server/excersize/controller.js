@@ -10,7 +10,7 @@ const app = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/login", function(req, res, next) {
+app.post("/login", function(req, res) {
   if (checkKeys(req.body, ["name", "password"])) {
     let user = new User();
     user.name = req.body.name;
@@ -28,7 +28,7 @@ app.post("/login", function(req, res, next) {
   }
 });
 
-app.delete("/delete-user", function(req, res, next) {
+app.delete("/delete-user", function(req, res) {
   if (checkKeys(req.body, ["name", "password"])) {
     let user = new User();
     user.name = req.body.name;
@@ -48,7 +48,7 @@ app.delete("/delete-user", function(req, res, next) {
   }
 });
 
-app.put("/update-user-info", function(req, res, next) {
+app.put("/update-user-info", function(req, res) {
   if (
     checkKeys(req.body, [
       "oldName",
@@ -64,13 +64,13 @@ app.put("/update-user-info", function(req, res, next) {
     user.password = sha512.sha512(req.body.oldPassword);
     database.lookup(user, function(err, result) {
         if (result.password === user.password) {
-            let newUser = user;
+            let newUser = new User().genUserFromObject(user);
             newUser.name = req.body.newName;
             newUser.password = sha512.sha512(req.body.newPassword);
             newUser.firstName = req.body.newFirstName;
             newUser.lastName = req.body.newLastName;
             database.update(user, newUser, function(result) {
-            res.send(result);
+                res.send(result);
             });
         } else {
             res.send("false");
@@ -81,7 +81,7 @@ app.put("/update-user-info", function(req, res, next) {
   }
 });
 
-app.post("/sign-up", function(req, res, next) {
+app.post("/sign-up", function(req, res) {
   if (checkKeys(req.body, ["name", "firstName", "lastName", "password"])) {
     var name = req.body.name;
     var firstName = req.body.firstName;
@@ -97,7 +97,7 @@ app.post("/sign-up", function(req, res, next) {
   }
 });
 
-app.post("/step", function(req, res, next) {
+app.post("/step", function(req, res) {
   // ideally: this is going to be requested through AJAX whenever the user takes a step
   if (checkKeys(req.body, ["name"])) {
     var user = new User();
@@ -120,7 +120,7 @@ app.post("/step", function(req, res, next) {
   }
 });
 
-app.post("/set-info", function(req, res, next) {
+app.post("/set-info", function(req, res) {
   if (
     checkKeys(req.body, ["name", "height", "weight", "strideLength", "color"])
   ) {
@@ -140,21 +140,19 @@ app.post("/set-info", function(req, res, next) {
           database.update(user, newUser, function(result) {
             res.send(result);
           });
-        } catch (err) {
+        } catch (e) {
           res.send("false");
         }
       } else {
-        console.log("names don't match");
         res.send("false");
       }
     });
   } else {
-      console.log("fields not existent");
     res.send("false");
   }
 });
 
-app.post("/set-goal", function(req, res, next) {
+app.post("/set-goal", function(req, res) {
   if (checkKeys(req.body, ["name", "goalType", "goalValue"])) {
     var user = new User();
     user.name = req.body.name;
@@ -179,7 +177,7 @@ app.post("/set-goal", function(req, res, next) {
   }
 });
 
-app.post("/get-goal", function(req, res, next) {
+app.post("/get-goal", function(req, res) {
   if (checkKeys(req.body, ["name"])) {
     let user = new User();
     user.name = req.body.name;
@@ -192,7 +190,7 @@ app.post("/get-goal", function(req, res, next) {
   }
 });
 
-app.post("/get-name", function(req, res, next) {
+app.post("/get-name", function(req, res) {
   if (checkKeys(req.body, ["name"])) {
     let user = new User();
     user.name = req.body.name;
@@ -206,7 +204,7 @@ app.post("/get-name", function(req, res, next) {
   }
 });
 
-app.post("/get-first-name", function(req, res, next) {
+app.post("/get-first-name", function(req, res) {
   if (checkKeys(req.body, ["name"])) {
     let user = new User();
     user.name = req.body.name;
@@ -220,7 +218,7 @@ app.post("/get-first-name", function(req, res, next) {
   }
 });
 
-app.post("/get-favorite-color", function(req, res, next) {
+app.post("/get-favorite-color", function(req, res) {
   if (checkKeys(req.body, ["name"])) {
     let user = new User();
     user.name = req.body.name;
@@ -234,7 +232,7 @@ app.post("/get-favorite-color", function(req, res, next) {
   }
 });
 
-app.post("/add-friend", function(req, res, next) {
+app.post("/add-friend", function(req, res) {
   if (checkKeys(req.body, ["name", "friendName"])) {
     let user = new User();
     user.name = req.body.name;
@@ -261,7 +259,7 @@ app.post("/add-friend", function(req, res, next) {
   }
 });
 
-app.post("/get-friends", function(req, res, next) {
+app.post("/get-friends", function(req, res) {
   if (checkKeys(req.body, ["name"])) {
     let user = new User();
     user.name = req.body.name;
@@ -275,7 +273,7 @@ app.post("/get-friends", function(req, res, next) {
   }
 });
 
-app.post("/should-display-data", function(req, res, next) {
+app.post("/should-display-data", function(req, res) {
   if (checkKeys(req.body, ["name", "friendName"])) {
     let user = new User();
     user.name = req.body.name;
