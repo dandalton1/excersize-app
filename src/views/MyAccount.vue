@@ -13,6 +13,8 @@
       <input type="number" name="weight">
       <p>Stride length (in inches):</p>
       <input type="number" name="stride-length">
+      <p>Favorite Color:</p>
+      <input type="color" name="favorite-color">
       <p>&nbsp;</p>
       <input type="submit" class="btn btn-primary">
     </form>

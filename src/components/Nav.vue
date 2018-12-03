@@ -1,7 +1,10 @@
 <template>
   <div>
     <span class="navbar-text" v-if="firstName !== undefined">Welcome back, {{firstName}}!</span>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-dark"
+      v-bind:style="{ backgroundColor: backgroundColor }"
+    >
       <ul class="nav navbar-nav">
         <li class="nav-item">
           <router-link class="nav-link" exact-active-class="active" to="/">Home</router-link>
@@ -34,6 +37,7 @@
 
 <script>
 import * as cookieManager from "@/services/cookies";
+import * as api from "@/services/api_access";
 export default {
   computed: {
       firstName: {
@@ -44,6 +48,13 @@ export default {
       username: {
           get: function() {
               return cookieManager.getCookieValue("username");
+          }
+      },
+      favoriteColor: {
+          get: function() {
+              return api.getFavoriteColor(cookieManager.getCookieValue("username")).then(function(response) {
+                  return response.favoriteColor;
+              });
           }
       }
   },

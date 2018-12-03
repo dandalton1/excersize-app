@@ -115,7 +115,9 @@ app.post("/step", function(req, res, next) {
 });
 
 app.post("/set-info", function(req, res, next) {
-  if (checkKeys(req.body, ["name", "height", "weight", "strideLength"])) {
+  if (
+    checkKeys(req.body, ["name", "height", "weight", "strideLength", "color"])
+  ) {
     var user = new User();
     user.name = req.body.name;
     database.lookup(user, function(err, result) {
@@ -127,6 +129,7 @@ app.post("/set-info", function(req, res, next) {
           newUser.height = parseInt(req.body.height);
           newUser.weight = parseInt(req.body.weight);
           newUser.strideLength = parseInt(req.body.strideLength);
+          newUser.favoriteColor = req.body.color;
           newUser.goal = {};
           database.update(user, newUser, function(result) {
             res.send(result);
@@ -203,6 +206,20 @@ app.post("/get-first-name", function(req, res, next) {
       if (err) throw err;
       user = new User().genUserFromObject(result);
       res.send(`{"firstName": "${user.firstName}"}`);
+    });
+  } else {
+    res.send("false");
+  }
+});
+
+app.post("/get-favorite-color", function(req, res, next) {
+  if (checkKeys(req.body, ["name"])) {
+    let user = new User();
+    user.name = req.body.name;
+    database.lookup(user, function(err, result) {
+      if (err) throw err;
+      user = new User().genUserFromObject(result);
+      res.send(`{"favoriteColor": "${user.favoriteColor}"}`);
     });
   } else {
     res.send("false");

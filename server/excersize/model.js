@@ -12,6 +12,7 @@ class User {
     this.strideLength = 0;
     this.goal = {};
     this.friends = [];
+    this.favoriteColor = "#000000";
   }
 
   verify(user, password) {
