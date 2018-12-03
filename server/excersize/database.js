@@ -16,62 +16,79 @@ let url = `mongodb://${db_host}:${db_port}/${db_name}`;
 let collection = null;
 
 class Database {
-    constructor() {
-        this.init();
-    }
+  constructor() {
+    this.init();
+  }
 
-    init() {
-        mongo.connect(url, { useNewUrlParser: true, noDelay: true }, function (err, db) {
-            if (err) throw err;
-            console.log("database created");
-            db.db("excersize-db").createCollection("users", function (err, res) {
-                if (err) throw err;
-                console.log("created users collection");
-                collection = db.db("excersize-db").collection("users");
-            });
+  init() {
+    mongo.connect(
+      url,
+      { useNewUrlParser: true, noDelay: true },
+      function(err, db) {
+        if (err) throw err;
+        console.log("database created");
+        db.db("excersize-db").createCollection("users", function(err, res) {
+          if (err) throw err;
+          console.log("created users collection");
+          collection = db.db("excersize-db").collection("users");
         });
-    }
+      }
+    );
+  }
 
-    lookup(user, callback) {
-        collection.findOne({ name: user.name }, function (err, result) {
-            if (err) { throw err; }
-            callback(err, result);
+  lookup(user, callback) {
+    console.log(user);
+    collection.findOne({ name: user.name }, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      callback(err, result);
+    });
+  }
+
+  delete(user, callback) {
+    collection.deleteOne({ name: user.name }, callback);
+  }
+
+  update(user, newUser, callback) {
+    this.lookup(user, function(err, result) {
+      if (err) throw err;
+      if (
+        result === undefined ||
+        result === null ||
+        user === null ||
+        newUser === null
+      ) {
+        callback(false);
+      } else if (result.name === user.name) {
+        collection.updateOne({ name: user.name }, { $set: newUser }, function(
+          err,
+          result
+        ) {
+          if (err) throw err;
+          callback(result.modifiedCount > 0);
         });
-    }
+      } else {
+        callback(false);
+      }
+    });
+  }
 
-    delete(user, callback) {
-        collection.deleteOne({ name: user.name }, callback);
-    }
-
-    update(user, newUser, callback) {
-        this.lookup(user, function (err, result) {
-            if (err) throw err;
-            if (result.name === user.name) {
-                collection.updateOne({ name: user.name }, { $set: newUser }, function (err, result) {
-                    if (err) throw err;
-                    callback(result.modifiedCount > 0);
-                });
-            } else {
-                callback(false);
-            }
+  add(user, callback) {
+    this.lookup(user, function(err, result) {
+      if (err) throw err;
+      if (result) {
+        if (result.name === user.name) {
+          callback(false);
+        }
+      } else {
+        collection.insertOne(user, function(err, result) {
+          if (err) throw err;
+          callback(result.insertedCount > 0);
         });
-    }
-
-    add(user, callback) {
-        this.lookup(user, function (err, result) {
-            if (err) throw err;
-            if (result) {
-                if (result.name === user.name) {
-                    callback(false);
-                }
-            } else {
-                collection.insertOne(user, function (err, result) {
-                    if (err) throw err;
-                    callback(result.insertedCount > 0);
-                });
-            }
-        });
-    }
+      }
+    });
+  }
 }
 
 module.exports = Database;

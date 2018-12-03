@@ -7,6 +7,28 @@ export function login(username, password) {
   });
 }
 
+export function updateInfo(
+  oldUsername,
+  oldPassword,
+  newUsername,
+  newPassword,
+  newFirstName,
+  newLastName
+) {
+  return myFetch(
+    `${api_root}/update-user-info`,
+    {
+      oldName: oldUsername,
+      oldPassword: oldPassword.toString(),
+      newName: newUsername,
+      newPassword: newPassword.toString(),
+      newFirstName: newFirstName,
+      newLastName: newLastName
+    },
+    "PUT"
+  );
+}
+
 export function getFirstName(username) {
   return myFetch(`${api_root}/get-first-name`, { name: username });
 }

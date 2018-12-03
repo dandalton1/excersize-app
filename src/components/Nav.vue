@@ -56,7 +56,7 @@ export default {
             }
 
             // see https://stackoverflow.com/a/12043228/2089760 for how I get this
-            const rgb = response.favoriteColor.substring(1);
+            const rgb = ref.favoriteColor.substring(1);
             const r = (rgb >> 16) & 0xff;
             const g = (rgb >>  8) & 0xff;
             const b =         rgb & 0xff;
