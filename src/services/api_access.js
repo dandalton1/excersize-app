@@ -1,4 +1,6 @@
-export let username = null;
+export let uname = null;
+export let firstName = null;
+export let readableName = null;
 const api_root = `http://localhost:80`;
 
 export function login(username, password) {
@@ -13,6 +15,20 @@ export function login(username, password) {
     });
 }
 
+function getFirstName() {
+  return myFetch(`${api_root}/get-first-name`, {name: uname}).then(function(response) {
+    this.firstName = response;
+    return response;
+  });
+}
+
+function getReadableName() {
+  return myFetch(`${api_root}/get-name`, {name: uname}).then(function(response) {
+    this.readableName = response;
+    return response;
+  });
+}
+
 export function signup(username, password, firstName, lastName) {
   return myFetch(`${api_root}/sign-up`, {
       name: username,
@@ -21,7 +37,9 @@ export function signup(username, password, firstName, lastName) {
       lastName: lastName
   }).then(function (x) {
       if (x === "true") {
-          this.username = username;
+          this.uname = username;
+          getFirstName();
+          getReadableName();
       }
       return x;
   });
@@ -32,7 +50,7 @@ function myFetch(url = ``, data = null, method = null) {
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
       credentials: "same-origin", // include, same-origin, *omit
       headers: {
-        username: username
+        username: uname
       }
     };
     if (data) {

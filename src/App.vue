@@ -4,9 +4,6 @@
       <div class="col">
         Excersize App
       </div>
-      <div class="col" style="text-align: right;">
-        <span v-if="username !== null">Welcome back, {{readableName}}!</span>
-      </div>
     </div>
     <Nav />
     <div id="alert-pane" style="position: sticky;"></div>
@@ -16,29 +13,11 @@
 
 <script>
 import Nav from "@/components/Nav";
-import * as api from "@/services/api_access";
 
 export default {
   name: "app",
-  data: function () {
-    return {
-      info: {
-        readableName: "",
-        firstName: "",
-        lastName: ""
-      }
-    }
-  },
   components: {
     Nav: Nav
-  },
-  methods: {
-    
-  },
-  computed: {
-    username() {
-      return api.username;
-    }
   }
 }
 </script>
