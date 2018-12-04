@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const startTime = new Date();
 
 console.log(`loading...`);
@@ -74,7 +76,7 @@ console.log(
     startTime.getTime()} ms)`
 );
 
-app.use(function(req, res, next) {
+app.use(function(req, res) {
   console.log("failed to get url: " + req.originalUrl);
   res.status(404).render("404");
 });
@@ -87,6 +89,7 @@ app.use(function(err, req, res, next) {
     return next(err);
   }
   console.error("ERROR! " + err.stack);
+  console.error("DETAILS: " + req);
   res.status(500).render("500");
 });
 console.log(
@@ -101,3 +104,5 @@ console.log(
   `listening on: http://${server}:${port} (${endTime.getTime() -
     startTime.getTime()} ms)`
 );
+
+/* eslint-enable no-console */

@@ -27,6 +27,8 @@
         </li>
         <li class="nav-item" v-if="username !== undefined">
           <router-link class="nav-link" exact-active-class="active" to="/walk">Start Walking</router-link>
+        </li><li class="nav-item" v-if="username !== undefined">
+          <router-link class="nav-link" exact-active-class="active" to="/goal">Goal</router-link>
         </li>
         <li class="nav-item" v-if="username !== undefined">
           <a class="nav-link" href="javascript:void(0)" @click.prevent="logout">Log Out</a>
@@ -55,15 +57,19 @@ export default {
                 ref.favoriteColor = "#000000";
             }
 
-            // see https://stackoverflow.com/a/12043228/2089760 for how I get this
-            const rgb = parseInt(ref.favoriteColor.substring(1), 16);
-            const r = (rgb >> 16) & 0xff;
-            const g = (rgb >>  8) & 0xff;
-            const b =         rgb & 0xff;
+            try {
+              // see https://stackoverflow.com/a/12043228/2089760 for how I get this
+              const rgb = parseInt(ref.favoriteColor.substring(1), 16);
+              const r = (rgb >> 16) & 0xff;
+              const g = (rgb >>  8) & 0xff;
+              const b =         rgb & 0xff;
 
-            const lum = (0.2126 * r) + (0.7152 * g) + (0.0722 * b);
+              const lum = (r + g + b) / 765.;
 
-            if (lum > 0.5) { ref.dark = false; }
+              if (lum > 0.5) { ref.dark = false; }
+            } catch (e) {
+              ref.favoriteColor = "#000000";
+            }
         });
     },
     computed: {

@@ -26,9 +26,11 @@ class Database {
       { useNewUrlParser: true, noDelay: true },
       function(err, db) {
         if (err) throw err;
+        //eslint-disable-next-line
         console.log("database created");
-        db.db("excersize-db").createCollection("users", function(err, res) {
+        db.db("excersize-db").createCollection("users", function(err) {
           if (err) throw err;
+          //eslint-disable-next-line
           console.log("created users collection");
           collection = db.db("excersize-db").collection("users");
         });
@@ -37,7 +39,6 @@ class Database {
   }
 
   lookup(user, callback) {
-    console.log(user);
     collection.findOne({ name: user.name }, function(err, result) {
       if (err) {
         throw err;

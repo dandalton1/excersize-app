@@ -156,22 +156,29 @@ app.post("/set-goal", function(req, res) {
   if (checkKeys(req.body, ["name", "goalType", "goalValue"])) {
     var user = new User();
     user.name = req.body.name;
-    database.lookup(user, function(err, result) {
-      if (err) throw err;
-      var newUser;
-      if (user.name === result.name) {
-        newUser = new User().genUserFromObject(result);
-        newUser.goal = new Goal().createNewGoal(
-          req.body.goalType,
-          req.body.goalValue
-        );
-        database.update(user, newUser, function(result) {
-          res.send(result);
-        });
-      } else {
-        res.send("false");
-      }
-    });
+    try {
+      parseInt(req.body.goalType);
+      parseInt(req.body.goalValue);
+      database.lookup(user, function(err, result) {
+        if (err) throw err;
+        var newUser;
+        if (user.name === result.name) {
+          newUser = new User().genUserFromObject(result);
+          newUser.goal = new Goal().createNewGoal(
+            req.body.goalType,
+            req.body.goalValue
+          );
+          database.update(user, newUser, function(result) {
+            res.send(result);
+          });
+        } else {
+          res.send("false");
+        }
+      });
+    } catch (e) {
+      res.send("false");
+    }
+    
   } else {
     res.send("false");
   }

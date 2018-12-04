@@ -13,7 +13,7 @@
       <input type="number" name="weight">
       <p>Stride length (in inches):</p>
       <input type="number" name="stride-length">
-      <p>Favorite Color (in hex, or, if applicable, use color picker):</p>
+      <p>Favorite Color (in hex, prefixed with a number sign (#), or, if applicable, use color picker):</p>
       <input type="color" name="favorite-color">
       <p>&nbsp;</p>
       <button class="btn btn-primary" @click.prevent="addMoreInfo">Submit</button>
