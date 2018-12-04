@@ -80,6 +80,18 @@ export function setGoal(username, goalType, goalValue) {
   return myFetch(`${api_root}/set-goal`, {name: username, goalType: goalType, goalValue: goalValue});
 }
 
+export function addFriend(username, friendName) {
+  return myFetch(`${api_root}/add-friend`, {name: username, friendName: friendName});
+}
+
+export function getFriends(username) {
+  return myFetch(`${api_root}/get-friends`, {name: username});
+}
+
+export function shouldDisplayData(username, friendName) {
+  return myFetch(`${api_root}/should-display-data`, {name: username, friendName: friendName});
+}
+
 function myFetch(url = ``, data = null, method = null) {
   let options = {
     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

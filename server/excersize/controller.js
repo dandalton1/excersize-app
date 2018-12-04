@@ -258,11 +258,11 @@ app.post("/add-friend", function(req, res) {
           res.send(result);
         });
       } else {
-        res.send("user already has friend");
+        res.send("false");
       }
     });
   } else {
-    res.send("please include a name and friend name");
+    res.send("false");
   }
 });
 
@@ -276,7 +276,7 @@ app.post("/get-friends", function(req, res) {
       res.send(user.friends);
     });
   } else {
-    res.send("please include a name");
+    res.send("false");
   }
 });
 
