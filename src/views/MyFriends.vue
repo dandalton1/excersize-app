@@ -24,14 +24,7 @@ import * as goalFunctions from "@/services/goal_functions";
 
 export default {
   name: "my-friends",
-  data() {
-    return {
-      favoriteColor: "#000000",
-      dark: true
-    };
-  },
   created() {
-    var ref = this;
     api
       .getFriends(cookieManager.getCookieValue("username"))
       .then(function(response) {
