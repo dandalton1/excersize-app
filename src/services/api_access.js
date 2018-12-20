@@ -8,6 +8,12 @@ export function login(username, password) {
   });
 }
 
+export function search(query) {
+  return myFetch(`${api_root}/search`, {
+    query: query
+  })
+}
+
 export function updateInfo(
   oldUsername,
   oldPassword,

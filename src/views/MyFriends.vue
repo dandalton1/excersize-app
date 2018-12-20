@@ -7,9 +7,17 @@
     <p>In order to see a friend's information, they also need to friend you.</p>
     <p>To friend someone, type in their username and click the "add" button.</p>
     <form name="addFriend">
-      <p>
-        <input type="text" name="friendName">
-      </p>
+      <ul>
+        <li>
+          <input type="text" name="friendName" v-model="friendName" @change="updateAutoComplete">
+        </li>
+        <li
+          v-for="user in autoCompletionSuggestions"
+          v-bind:key="user.name"
+          class="suggestion"
+          @click.prevent="updateName(friendName)"
+        >{{ user.name }}</li>
+      </ul>
       <p>
         <button class="btn btn-primary" @click.prevent="addFriend">Add Friend</button>
       </p>
@@ -24,6 +32,12 @@ import * as goalFunctions from "@/services/goal_functions";
 
 export default {
   name: "my-friends",
+  data() {
+    return {
+      autoCompletionSuggestions: [],
+      friendName: ""
+    };
+  },
   created() {
     api
       .getFriends(cookieManager.getCookieValue("username"))
@@ -111,6 +125,15 @@ export default {
             }, 500);
           }, 5000);
         });
+    },
+    updateAutoComplete() {
+      const ref = this;
+      api.search(document.addFriend.friendName.value).then(function(result) {
+        ref.autoCompletionSuggestions = result;
+      });
+    },
+    updateName(name) {
+      this.friendName = name;
     }
   }
 };
@@ -121,5 +144,36 @@ export default {
   border-radius: 5px;
   border-width: 1px;
   margin-bottom: 5px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.suggestion {
+  background: #bbb;
+  animation-name: swoop;
+  animation-duration: 0.5s;
+  transform-origin: top;
+  transition: background-color 0.5s;
+  cursor: pointer;
+  width: 75vw;
+  &:hover {
+    background-color: #ccc;
+  }
+}
+
+input {
+  width: 75vw;
+}
+
+@keyframes swoop {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
 }
 </style>

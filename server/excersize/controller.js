@@ -310,11 +310,19 @@ app.post("/should-display-data", function(req, res) {
       user = new User().genUserFromObject(result);
       if (user.friends.includes(req.body.friendName)) {
         let friend = new User();
-        friend.name = req.body.friendName;
-        database.lookup(friend, function(err, result) {
-          if (err) throw err;
-          res.send(result.friends.includes(user.name));
-        });
+        if (result) {
+          friend.name = req.body.friendName;
+          database.lookup(friend, function(err, result) {
+            if (err) throw err;
+            if (result) {
+              res.send(result.friends.includes(user.name));
+            } else {
+              res.send("false");
+            }
+          });
+        } else {
+          res.send("false");
+        }
       } else {
         res.send("false");
       }
