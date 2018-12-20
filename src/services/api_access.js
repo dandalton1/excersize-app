@@ -1,5 +1,6 @@
 const api_root = `http://localhost:80`;
 
+
 export function login(username, password) {
   return myFetch(`${api_root}/login`, {
     name: username,
@@ -29,6 +30,23 @@ export function updateInfo(
   );
 }
 
+export function addMoreInfo(username, height, weight, strideLength, color) {
+  return myFetch(`${api_root}/set-info`, {
+    name: username,
+    height: height,
+    weight: weight,
+    strideLength: strideLength,
+    color: color
+  });
+}
+
+export function deleteAccount(username, password) {
+  return myFetch(`${api_root}/delete-user`, {
+    name: username,
+    password: password
+  }, "DELETE");
+}
+
 export function getFirstName(username) {
   return myFetch(`${api_root}/get-first-name`, { name: username });
 }
@@ -41,6 +59,10 @@ export function getFavoriteColor(username) {
   return myFetch(`${api_root}/get-favorite-color`, { name: username });
 }
 
+export function step(username) {
+  return myFetch(`${api_root}/step`, { name: username });
+}
+
 export function signup(username, password, firstName, lastName) {
   return myFetch(`${api_root}/sign-up`, {
     name: username,
@@ -48,6 +70,26 @@ export function signup(username, password, firstName, lastName) {
     firstName: firstName,
     lastName: lastName
   });
+}
+
+export function getGoal(username) {
+  return myFetch(`${api_root}/get-goal`, {name: username});
+}
+
+export function setGoal(username, goalType, goalValue) {
+  return myFetch(`${api_root}/set-goal`, {name: username, goalType: goalType, goalValue: goalValue});
+}
+
+export function addFriend(username, friendName) {
+  return myFetch(`${api_root}/add-friend`, {name: username, friendName: friendName});
+}
+
+export function getFriends(username) {
+  return myFetch(`${api_root}/get-friends`, {name: username});
+}
+
+export function shouldDisplayData(username, friendName) {
+  return myFetch(`${api_root}/should-display-data`, {name: username, friendName: friendName});
 }
 
 function myFetch(url = ``, data = null, method = null) {

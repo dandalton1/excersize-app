@@ -20,9 +20,11 @@ class User {
   }
 
   genUserFromObject(o) {
-    var keys = Object.keys(o);
-    for (var key in keys) {
-      this[keys[key]] = o[keys[key]];
+    if (o !== null && o !== undefined) {
+      var keys = Object.keys(o);
+      for (var key in keys) {
+        this[keys[key]] = o[keys[key]];
+      }
     }
     return this;
   }
@@ -57,29 +59,37 @@ class Goal {
 
   calculateProgress(user) {
     switch (this.goalType) {
-      case GoalTypes.MILES: {
-        this.goalProgress =
-          ((1 / (12 / user.strideLength) / 5280) * user.steps) / this.goalValue;
-        break;
-      }
-      case GoalTypes.STEPS: {
-        this.goalProgress = user.steps / this.goalValue;
-        break;
-      }
-      case GoalTypes.WEIGHT_LOSS: {
-        // formula: https://www.livestrong.com/article/238020-how-to-convert-pedometer-steps-to-calories/
-        // 3500 cal = 1 lb loss
-        let stepsInAMile = 5280 * (user.strideLength / 12);
-        let calPerMile = 0.57 * user.weight;
-        let lbPerMile = calPerMile / 3500;
-        let lbPerStep = lbPerMile / stepsInAMile;
-        this.goalProgress = (lbPerStep * user.steps) / this.goalValue;
-        break;
-      }
-      default: {
-        console.log("user has invalid goal type: " + this.goalType);
-        break;
-      }
+      case GoalTypes.MILES:
+        {
+          this.goalProgress =
+          ((1. / (12. / user.strideLength) / 5280.) * user.steps) / this.goalValue;
+          this.goalProgress *= 100.;
+          break;
+        }
+      case GoalTypes.STEPS:
+        {
+          this.goalProgress = user.steps / this.goalValue;
+          this.goalProgress *= 100.;
+          break;
+        }
+      case GoalTypes.WEIGHT_LOSS:
+        {
+          // formula: https://www.livestrong.com/article/238020-how-to-convert-pedometer-steps-to-calories/
+          // 3500 cal = 1 lb loss
+          let stepsInAMile = 5280. * (user.strideLength / 12.);
+          let calPerMile = 0.57 * user.weight;
+          let lbPerMile = calPerMile / 3500.;
+          let lbPerStep = lbPerMile / stepsInAMile;
+          this.goalProgress = (lbPerStep * user.steps) / this.goalValue;
+          this.goalProgress *= 100.;
+          break;
+        }
+      default:
+        {
+          //eslint-disable-next-line
+          console.log("user has invalid goal type: " + this.goalType);
+          break;
+        }
     }
   }
 
@@ -91,7 +101,7 @@ class Goal {
   }
 }
 
-var GoalTypes = Object.freeze({
+const GoalTypes = Object.freeze({
   STEPS: 0,
   WEIGHT_LOSS: 1,
   MILES: 2

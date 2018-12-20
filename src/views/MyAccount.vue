@@ -13,10 +13,10 @@
       <input type="number" name="weight">
       <p>Stride length (in inches):</p>
       <input type="number" name="stride-length">
-      <p>Favorite Color (in hex, or, if applicable, use color picker):</p>
+      <p>Favorite Color (in hex, prefixed with a number sign (#), or, if applicable, use color picker):</p>
       <input type="color" name="favorite-color">
       <p>&nbsp;</p>
-      <input type="submit" class="btn btn-primary">
+      <button class="btn btn-primary" @click.prevent="addMoreInfo">Submit</button>
     </form>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
@@ -34,7 +34,7 @@
       <p>Last Name:</p>
       <input type="text" name="lastName">
       <p>&nbsp;</p>
-      <input type="submit" class="btn btn-primary" value="Update" @click.prevent="editAccount">
+      <button class="btn btn-primary" @click.prevent="editAccount">Update</button>
     </form>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
@@ -44,53 +44,126 @@
     <form name="delete-account">
       <input type="password" name="password">
       <p>&nbsp;</p>
-      <input type="submit" class="btn btn-danger" value="Delete Account">
+      <button class="btn btn-danger" @click.prevent="deleteAccount">Delete Account</button>
     </form>
   </div>
 </template>
 
 <script>
-import * as api from '@/services/api_access';
-import * as cookieManager from '@/services/cookies';
+import * as api from "@/services/api_access";
+import * as cookieManager from "@/services/cookies";
 
 export default {
-    name: "my-account",
-    methods: {
-        editAccount() {
-            var formResult = document.getElementsByName("edit-account")[0];
-            api.updateInfo(
+  name: "my-account",
+  methods: {
+    editAccount() {
+      var formResult = document.getElementsByName("edit-account")[0];
+      api
+        .updateInfo(
+          cookieManager.getCookieValue("username"),
+          formResult[0].value,
+          formResult[2].value,
+          formResult[1].value,
+          formResult[3].value,
+          formResult[4].value
+        )
+        .then(function(result) {
+          var a = document.createElement("div");
+          if (result === true) {
+            a.className = "alert alert-success";
+            a.innerText = "Info successfully updated!";
+            cookieManager.setCookie("username", formResult[2].value, 7);
+            api
+              .getFirstName(cookieManager.getCookieValue("username"))
+              .then(function(result) {
+                cookieManager.setCookie("firstName", result.firstName, 7);
+                api
+                  .getReadableName(cookieManager.getCookieValue("username"))
+                  .then(function(result) {
+                    cookieManager.setCookie("readableName", result.name, 7);
+                    window.location = "/";
+                  });
+              });
+          } else {
+            a.className = "alert alert-danger";
+            a.innerText =
+              "Setting information was unsuccessful! Was your password correct?";
+          }
+          document.getElementById("alert-pane").appendChild(a);
+          setTimeout(function() {
+            a.className += " slideUp";
+            setTimeout(function() {
+              document.getElementById("alert-pane").removeChild(a);
+            }, 500);
+          }, 5000);
+        });
+    },
+    addMoreInfo() {
+      var formResult = document.getElementsByName("add-more-info")[0];
+      api
+        .addMoreInfo(
+          cookieManager.getCookieValue("username"),
+          formResult[0].value,
+          formResult[1].value,
+          formResult[2].value,
+          formResult[3].value
+        )
+        .then(function(result) {
+          var a = document.createElement("div");
+          if (result === true) {
+            a.className = "alert alert-success";
+            a.innerText = "Info successfully updated!";
+            window.location = "/";
+          } else {
+            a.className = "alert alert-danger";
+            a.innerText = "Setting information was unsuccessful!";
+          }
+          document.getElementById("alert-pane").appendChild(a);
+          setTimeout(function() {
+            a.className += " slideUp";
+            setTimeout(function() {
+              document.getElementById("alert-pane").removeChild(a);
+            }, 500);
+          }, 5000);
+        });
+    },
+    deleteAccount() {
+      var formResult = document.getElementsByName("delete-account")[0];
+      if (confirm("Are you sure you want to delete your account?")) {
+        if (confirm("Are you SURE you're sure?")) {
+          if (
+            confirm(
+              "Are you sure you're sure you're sure? After that, we won't bug you."
+            )
+          ) {
+            api
+              .deleteAccount(
                 cookieManager.getCookieValue("username"),
-                formResult[0].value,
-                formResult[2].value,
-                formResult[1].value,
-                formResult[3].value,
-                formResult[4].value
-            ).then(function(result) {
+                formResult[0].value
+              )
+              .then(function(result) {
                 var a = document.createElement("div");
                 if (result === true) {
-                    a.className = "alert alert-success";
-                    a.innerText = "Info successfully updated!";
-                    cookieManager.setCookie("username", formResult[2], 7);
-                    api.getFirstName(username).then(function(result) {
-                        cookieManager.setCookie("firstName", result.firstName, 7);
-                        api.getReadableName(username).then(function(result) {
-                            cookieManager.setCookie("readableName", result.name, 7);
-                            window.location = "/";
-                        });
-                    });
+                  a.className = "alert alert-success";
+                  a.innerText = "Goodbye, my friend.";
+                  cookieManager.clearCookie();
+                  window.location = "/";
                 } else {
-                    a.className = "alert alert-danger";
-                    a.innerText = "Setting information was unsuccessful! Was your password correct?";
+                  a.className = "alert alert-danger";
+                  a.innerText = "Your password wasn't correct.";
                 }
                 document.getElementById("alert-pane").appendChild(a);
                 setTimeout(function() {
-                    a.className += " slideUp";
-                    setTimeout(function() {
-                        document.getElementById("alert-pane").removeChild(a);
-                    }, 500);
+                  a.className += " slideUp";
+                  setTimeout(function() {
+                    document.getElementById("alert-pane").removeChild(a);
+                  }, 500);
                 }, 5000);
-            });
+              });
+          }
         }
+      }
     }
-}
+  }
+};
 </script>

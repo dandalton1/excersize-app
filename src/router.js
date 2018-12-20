@@ -7,6 +7,7 @@ import SignUp from './views/SignUp.vue';
 import MyAccount from './views/MyAccount.vue';
 import MyFriends from './views/MyFriends.vue';
 import Walk from './views/Walk.vue';
+import Goal from './views/Goal.vue';
 
 Vue.use(Router);
 
@@ -48,6 +49,11 @@ export default new Router({
       path: "/walk",
       name: "walk",
       component: Walk
+    },
+    {
+      path: "/goal",
+      name: "goal",
+      component: Goal
     }
   ]
 });
