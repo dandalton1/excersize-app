@@ -115,7 +115,7 @@ export default {
             a.innerText = "Added friend!";
           } else {
             a.className = "alert alert-danger";
-            a.innerText = "Could not get friend!";
+            a.innerText = "Could not add friend!";
           }
           document.getElementById("alert-pane").appendChild(a);
           setTimeout(function() {
