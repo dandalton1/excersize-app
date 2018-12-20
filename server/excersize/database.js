@@ -47,13 +47,16 @@ class Database {
     });
   }
 
-  search(query, callback) {
-    collection.findMany({ name: query}, function(err, result) {
-      if (err) {
-        throw err;
-      }
-      callback(err, result);
-    });
+  search(query, fields, callback) {
+    collection
+      .find({ name: { $regex: query + "*" } })
+      .project(fields)
+      .toArray(function(err, result) {
+        if (err) {
+          throw err;
+        }
+        callback(err, result);
+      });
   }
 
   delete(user, callback) {

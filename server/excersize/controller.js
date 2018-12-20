@@ -28,6 +28,28 @@ app.post("/login", function(req, res) {
   }
 });
 
+app.post("/search", function(req, res) {
+  if (checkKeys(req.body, ["query"])) {
+    database.search(
+      req.body.query,
+      {
+        name: 1,
+        _id: 0
+      },
+      function(err, result) {
+        if (err) throw err;
+        if (result) {
+          res.send(result);
+        } else {
+          res.send("[]");
+        }
+      }
+    );
+  } else {
+    res.send("[]");
+  }
+});
+
 app.delete("/delete-user", function(req, res) {
   if (checkKeys(req.body, ["name", "password"])) {
     let user = new User();
@@ -63,18 +85,18 @@ app.put("/update-user-info", function(req, res) {
     user.name = req.body.oldName;
     user.password = sha512.sha512(req.body.oldPassword);
     database.lookup(user, function(err, result) {
-        if (result.password === user.password) {
-            let newUser = new User().genUserFromObject(user);
-            newUser.name = req.body.newName;
-            newUser.password = sha512.sha512(req.body.newPassword);
-            newUser.firstName = req.body.newFirstName;
-            newUser.lastName = req.body.newLastName;
-            database.update(user, newUser, function(result) {
-                res.send(result);
-            });
-        } else {
-            res.send("false");
-        }
+      if (result.password === user.password) {
+        let newUser = new User().genUserFromObject(user);
+        newUser.name = req.body.newName;
+        newUser.password = sha512.sha512(req.body.newPassword);
+        newUser.firstName = req.body.newFirstName;
+        newUser.lastName = req.body.newLastName;
+        database.update(user, newUser, function(result) {
+          res.send(result);
+        });
+      } else {
+        res.send("false");
+      }
     });
   } else {
     res.send("false");
@@ -178,7 +200,6 @@ app.post("/set-goal", function(req, res) {
     } catch (e) {
       res.send("false");
     }
-    
   } else {
     res.send("false");
   }
