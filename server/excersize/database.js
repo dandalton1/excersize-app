@@ -49,7 +49,9 @@ class Database {
 
   search(query, fields, callback) {
     collection
-      .find({ name: { $regex: query + "*" } })
+      .find({
+        name: { $regex: new RegExp("^" + this.escapeRegExp(query) + ".+") }
+      })
       .project(fields)
       .toArray(function(err, result) {
         if (err) {
@@ -57,6 +59,14 @@ class Database {
         }
         callback(err, result);
       });
+  }
+
+  // from https://stackoverflow.com/a/6969486/2089760
+  // Yeah, I did use all of one line from StackOverflow, but this helps allow for a user to do
+  // something stupid like type a * and have the server not completely break lol
+  // regular expressions are a mess
+  escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
   }
 
   delete(user, callback) {

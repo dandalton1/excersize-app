@@ -9,7 +9,7 @@
     <form name="addFriend">
       <ul>
         <li>
-          <input type="text" name="friendName" v-model="friendName" @change="updateAutoComplete">
+          <input type="text" name="friendName" v-model="friendName" @keyup="updateAutoComplete">
         </li>
         <li
           v-for="user in autoCompletionSuggestions"
@@ -104,10 +104,7 @@ export default {
   methods: {
     addFriend() {
       api
-        .addFriend(
-          cookieManager.getCookieValue("username"),
-          document.addFriend.friendName.value
-        )
+        .addFriend(cookieManager.getCookieValue("username"), this.friendName)
         .then(function(result) {
           var a = document.createElement("div");
           if (result === true) {
@@ -128,12 +125,13 @@ export default {
     },
     updateAutoComplete() {
       const ref = this;
-      api.search(document.addFriend.friendName.value).then(function(result) {
+      api.search(ref.friendName).then(function(result) {
         ref.autoCompletionSuggestions = result;
       });
     },
     updateName(name) {
       this.friendName = name;
+      this.updateAutoComplete();
     }
   }
 };

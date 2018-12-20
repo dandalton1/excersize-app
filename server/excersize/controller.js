@@ -30,21 +30,25 @@ app.post("/login", function(req, res) {
 
 app.post("/search", function(req, res) {
   if (checkKeys(req.body, ["query"])) {
-    database.search(
-      req.body.query,
-      {
-        name: 1,
-        _id: 0
-      },
-      function(err, result) {
-        if (err) throw err;
-        if (result) {
-          res.send(result);
-        } else {
-          res.send("[]");
+    if (req.body.query !== "") {
+      database.search(
+        req.body.query,
+        {
+          name: 1,
+          _id: 0
+        },
+        function(err, result) {
+          if (err) throw err;
+          if (result) {
+            res.send(result);
+          } else {
+            res.send("[]");
+          }
         }
-      }
-    );
+      );
+    } else {
+      res.send("[]");
+    }
   } else {
     res.send("[]");
   }
