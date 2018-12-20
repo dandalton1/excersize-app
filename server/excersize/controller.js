@@ -262,38 +262,42 @@ app.post("/get-favorite-color", function(req, res) {
 
 app.post("/add-friend", function(req, res) {
   if (checkKeys(req.body, ["name", "friendName"])) {
-    let user = new User();
-    user.name = req.body.name;
-    database.lookup(user, function(err, result) {
-      if (err) throw err;
-      if (result) {
-        var newUser = new User().genUserFromObject(result);
-        let friend = new User();
-        friend.name = req.body.friendName;
-        database.lookup(friend, function(err, result) {
-          if (err) throw err;
-          if (result) {
-            var friendUser = new User().genUserFromObject(result);
-            var hasFriend = false;
-            for (var f in newUser.friends) {
-              if (newUser.friends[f] === friendUser.name) {
-                hasFriend = true;
+    if (req.body.name !== req.body.friendName) {
+      let user = new User();
+      user.name = req.body.name;
+      database.lookup(user, function(err, result) {
+        if (err) throw err;
+        if (result) {
+          var newUser = new User().genUserFromObject(result);
+          let friend = new User();
+          friend.name = req.body.friendName;
+          database.lookup(friend, function(err, result) {
+            if (err) throw err;
+            if (result) {
+              var friendUser = new User().genUserFromObject(result);
+              var hasFriend = false;
+              for (var f in newUser.friends) {
+                if (newUser.friends[f] === friendUser.name) {
+                  hasFriend = true;
+                }
               }
-            }
-            if (!hasFriend) {
-              newUser.friends.push(friendUser.name);
-              database.update(user, newUser, function(result) {
-                res.send(result);
-              });
+              if (!hasFriend) {
+                newUser.friends.push(friendUser.name);
+                database.update(user, newUser, function(result) {
+                  res.send(result);
+                });
+              } else {
+                res.send("false");
+              }
             } else {
               res.send("false");
             }
-          } else {
-            res.send("false");
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+    } else {
+      res.send("false");
+    }
   } else {
     res.send("false");
   }

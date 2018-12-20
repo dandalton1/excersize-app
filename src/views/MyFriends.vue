@@ -15,7 +15,7 @@
           v-for="user in autoCompletionSuggestions"
           v-bind:key="user.name"
           class="suggestion"
-          @click.prevent="updateName(friendName)"
+          @click.prevent="updateName(user.name)"
         >{{ user.name }}</li>
       </ul>
       <p>
