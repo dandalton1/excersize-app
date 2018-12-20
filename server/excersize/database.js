@@ -46,6 +46,15 @@ class Database {
     });
   }
 
+  search(query, callback) {
+    collection.findMany({ name: query}, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      callback(err, result);
+    });
+  }
+
   delete(user, callback) {
     collection.deleteOne({ name: user.name }, callback);
   }
